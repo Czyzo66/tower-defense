@@ -30,10 +30,11 @@ enum Player
 
 enum Error
 {
-	ERROR_LOADING_TEXTURE,	//0
-	ERROR_LOADING_SOUND,	//1
-	ERROR_LOADING_TILEMAP,	//2
-	ERROR_LOADING_FONT,		//3
+	ERROR_,
+	ERROR_LOADING_TEXTURE,	//1
+	ERROR_LOADING_SOUND,	//2
+	ERROR_LOADING_TILEMAP,	//3
+	ERROR_LOADING_FONT,		//4
 };
 
 class TileMap :public sf::Drawable, public sf::Transformable
@@ -151,12 +152,12 @@ int main()
 	//_cursor
 
 	//fonts
-	sf::Font fontFullPack2025;
+	/*sf::Font fontFullPack2025;
 	if (!fontFullPack2025.loadFromFile("fonts\\full_pack_2025.ttf")) 
 		return Error::ERROR_LOADING_FONT;
 	sf::Font fontNeuropolitical;
 	if (!fontNeuropolitical.loadFromFile("fonts\\neuropolitical_rg.ttf"))
-		return Error::ERROR_LOADING_FONT;
+		return Error::ERROR_LOADING_FONT;*/
 	//_fonts
 
 	//menu
@@ -187,42 +188,69 @@ int main()
 	//_buttons
 
 	//sounds
-	sf::SoundBuffer bufferDoot;
+	/*sf::SoundBuffer bufferDoot;
 	if (!bufferDoot.loadFromFile("sound\\SKULL-TRUMPET.wav")) 
 		return Error::ERROR_LOADING_SOUND;
 	sf::Sound soundDoot(bufferDoot);
 	sf::SoundBuffer bufferHit;
 	if (!bufferHit.loadFromFile("sound\\hitmarker.wav")) 
 		return Error::ERROR_LOADING_SOUND;
-	sf::Sound soundHit(bufferHit);
+	sf::Sound soundHit(bufferHit);*/
 	//_sounds
+
+	//map1
+	sf::Texture tLevel1;
+	if (!tLevel1.loadFromFile("textures\\level_1.png"))
+		return Error::ERROR_LOADING_TEXTURE;
+	sf::Sprite level1(tLevel1);
+	sf::Vector2f level1Size(tLevel1.getSize().x, tLevel1.getSize().y);
+	//_map1
 
 	//enemies
 	Enemy hotdog(420, 4);
-	if (!hotdog.load("textures\\hotdog.png", sf::Vector2f(30, 30)))
+	if (!hotdog.load("textures\\hotdog.png", sf::Vector2f(40, 40)))
 		return Error::ERROR_LOADING_TEXTURE;
-	hotdog.setPosition(sf::Vector2f(-30, 98));
-	std::vector<sf::Vector2f> track {sf::Vector2f(188.0f, 98.0f),
-		sf::Vector2f(188.0f, 278.0f),
-		sf::Vector2f(323.0f, 278.0f),
-		sf::Vector2f(323.0f, 143.0f),
-		sf::Vector2f(593.0f, 143.0f),
-		sf::Vector2f(593.0f, 458.0f),
-		sf::Vector2f(278.0f, 458.0f),
-		sf::Vector2f(278.0f, 548.0f),
-		sf::Vector2f(180.0f, 420.0f)};
-	hotdog.setTrack(track);
+	hotdog.setPosition(sf::Vector2f(1920*0.83333, 688*0.75));
+	std::vector<sf::Vector2f> trackLevel1_1920x1200
+		{sf::Vector2f(1920.0f, 688.0f),
+		sf::Vector2f(1897.0f, 674.0f),
+		sf::Vector2f(1745.0f, 627.0f),
+		sf::Vector2f(1614.0f, 606.0f),
+		sf::Vector2f(1492.0f, 599.0f),
+		sf::Vector2f(1397.0f, 605.0f),
+		sf::Vector2f(865.0f, 607.0f),
+		sf::Vector2f(794.0f, 624.0f),
+		sf::Vector2f(694.0f, 680.0f),
+		sf::Vector2f(676.0f, 719.0f),
+		sf::Vector2f(690.0f, 751.0f),
+		sf::Vector2f(725.0f, 773.0f),
+		sf::Vector2f(783.0f, 799.0f),
+		sf::Vector2f(890.0f, 821.0f),
+		sf::Vector2f(1028.0f, 828.0f),
+		sf::Vector2f(1302.0f, 816.0f),
+		sf::Vector2f(1395.0f, 816.0f),
+		sf::Vector2f(1473.0f, 846.0f),
+		sf::Vector2f(1513.0f, 887.0f),
+		sf::Vector2f(1543.0f, 946.0f),
+		sf::Vector2f(1553.0f, 999.0f),
+		sf::Vector2f(1541.0f, 1035.0f),
+		sf::Vector2f(1491.0f, 1083.0f),
+		sf::Vector2f(1417.0f, 1106.0f),
+		sf::Vector2f(1323.0f, 1110.0f),
+		sf::Vector2f(958.0f, 1099.0f),
+		sf::Vector2f(0.0f, 1014.0f)};
+	hotdog.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
 	Enemy hotdog2(420, 10);
 	if (!hotdog2.load("textures\\hotdog2.png", sf::Vector2f(30, 30)))
 		return Error::ERROR_LOADING_TEXTURE;
-	hotdog2.setPosition(sf::Vector2f(-30, 98));
-	hotdog2.setTrack(track);
+	hotdog2.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
+	hotdog2.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
 	bool hotdog2active = false;
 	Enemy hotdog3(420, 10);
 	if (!hotdog3.load("textures\\hotdog.png", sf::Vector2f(30, 30)))
 		return Error::ERROR_LOADING_TEXTURE;
 	hotdog3.setPosition(sf::Vector2f(-30, 98));
-	hotdog3.setTrack(track);
+	hotdog3.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
 	/*sf::Texture tHotdogLeft;
 	if (!tHotdogLeft.loadFromFile("hotdog_left.png"))
 		return Error::ERROR_LOADING_TEXTURE;
@@ -317,10 +345,15 @@ int main()
 						{
 							state = Player::PLAYER_IN_GAME;
 							hotdog.resetTimer();
+							hotdog.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
+							hotdog.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
+							hotdog2.resetTimer();
+							hotdog2.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
+							hotdog2.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
 							clock.restart();
 						}
-							state = Player::PLAYER_IN_GAME;
-							hotdog.resetTimer();
+							//state = Player::PLAYER_IN_GAME;
+							//hotdog.resetTimer();
 						if (buttonExitBounds.contains(static_cast<sf::Vector2f>(mousePosition)))
 							window.close();
 					}
@@ -344,7 +377,8 @@ int main()
 			drawButtonScaledIfActive(1.1f, buttonExit, buttonExitActive, window);
 			break;
 		case Player::PLAYER_IN_GAME:
-			window.draw(map);
+			level1.setScale((window.getSize().x / level1Size.x), (window.getSize().y / level1Size.y));
+			window.draw(level1);
 			hotdog.move();
 			window.draw(hotdog);
 			if (clock.getElapsedTime().asSeconds() > 2)

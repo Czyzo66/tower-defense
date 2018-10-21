@@ -26,6 +26,30 @@ bool Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 	//m_mid.setPosition(sf::Vector2f(100, 100));
 }
 
+bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY)
+{
+	m_track = track;
+	m_track.shrink_to_fit();
+	for (int i = 0; i < m_track.capacity(); ++i)
+	{
+		m_track[i].x *= targetX / textureX;
+		m_track[i].y *= targetY / textureY;
+	}
+	return true;
+}
+
+bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2f textureSize)
+{
+	m_track = track;
+	m_track.shrink_to_fit();
+	for (int i = 0; i < m_track.capacity(); ++i)
+	{
+		m_track[i].x *= targetSize.x / textureSize.x;
+		m_track[i].y *= targetSize.y / textureSize.y;
+	}
+	return true;
+}
+
 bool Enemy::setTrack(std::vector<sf::Vector2f>& track)
 {
 	m_track = track;
@@ -42,26 +66,40 @@ bool Enemy::setPosition(sf::Vector2f position)
 bool Enemy::move()
 {
 	sf::Time delta = m_clock.restart();
+	//int delta = 100000;
 	if (m_track.empty())
 		return false;
 	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed / 50000;
 	sf::Vector2f destination(m_track.at(0));
 	float angle;
-	if (destination.y != m_position.y)
+	if (destination.y != m_position.y && destination.x != m_position.x)
 		angle = atan((fabs(destination.x - m_position.x) / fabs(destination.y - m_position.y)));
 	else
 		angle = 90.0;
 	sf::Vector2f movementVector;
-	if (destination.x > m_position.x || destination.y > m_position.y)
+	if (destination.x >= m_position.x && destination.y > m_position.y)
 	{
 		movementVector.x = sin(angle) * moveDistance;
 		movementVector.y = cos(angle) * moveDistance;
 	}
-	else if (destination.x < m_position.x || destination.y < m_position.y)
+	else if (destination.x <= m_position.x && destination.y < m_position.y)
 	{
 		movementVector.x = -sin(angle) * moveDistance;
 		movementVector.y = -cos(angle) * moveDistance;
 	}
+	//?
+	else if (destination.x > m_position.x && destination.y <= m_position.y)
+	{
+		movementVector.x = sin(angle) * moveDistance;
+		movementVector.y = -cos(angle) * moveDistance;
+	}
+	else if (destination.x < m_position.x && destination.y >= m_position.y)
+	{
+		movementVector.x = -sin(angle) * moveDistance;
+		movementVector.y = cos(angle) * moveDistance;
+	}
+	//_?
+	
 
 	if (fabs(destination.x - m_position.x) <= fabs(movementVector.x) && fabs(destination.y - m_position.y) <= fabs(movementVector.y))
 	{
