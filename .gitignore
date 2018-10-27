@@ -1,4 +1,7 @@
 TowerDefenseSFML.vcxproj
 TowerDefenseSFML.vcxproj.filters
 TowerDefenseSFML.vcxproj.user
+TowerDefenseSFML.aps
+TowerDefenseSFML.rc
 Debug/
+oldResources/
