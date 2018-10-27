@@ -1,10 +1,12 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <string>
 #include <vector>
 #include <cmath>
+#include "Error.h"
 
-class Enemy :public sf::Drawable
+class Enemy : public sf::Drawable
 {
 private:
 	sf::Clock m_clock;
@@ -15,16 +17,26 @@ private:
 	sf::Sprite m_mid;
 	sf::Sprite m_right;
 	std::vector<sf::Vector2f> m_track;
+	bool m_active;
+	int m_state;
 	int m_hp;
 	double m_speed;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 public:
-	Enemy(int hp, int speed) : m_hp(hp), m_speed(speed), m_position(sf::Vector2f(0, 0)) {}
-	bool load(const std::string& textureFile, sf::Vector2f enemySize);
+	Enemy(int hp, int speed) : m_hp(hp), m_speed(speed), m_position(sf::Vector2f(0, 0)), m_state(0), m_active(false) {}
+	enum State
+	{
+		STATE_LEFT,
+		STATE_MID,
+		STATE_RIGHT,
+	};
+	int load(const std::string& textureFile, sf::Vector2f enemySize);
 	bool calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY);
-	bool calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2f textureSize);
+	bool calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize);
 	bool setTrack(std::vector<sf::Vector2f>& track);
 	bool setPosition(sf::Vector2f position);
 	bool move();
+	void setActive(bool ac) { m_active = ac; };
+	bool getActive() const { return m_active; };
 	void resetTimer();
 };

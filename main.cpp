@@ -2,12 +2,14 @@
 #include <SFML/Window/Cursor.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Audio.hpp>
-#include <cstdint>
 #include <string>
 #include <vector>
 #include <cmath>
+#include "Game.h"
+#include "Level.h"
 #include "Enemy.h"
 
+/*
 namespace Tile
 {
 	constexpr int size(45);
@@ -21,22 +23,18 @@ namespace Tile
 		TYPE_TOWER,
 	};
 }
+*/
 
-enum Player
-{
-	PLAYER_IN_MENU,
-	PLAYER_IN_GAME,
-};
+//enum Error
+//{
+//	ERROR_,					//0
+//	ERROR_LOADING_TEXTURE,	//1
+//	ERROR_LOADING_SOUND,	//2
+//	ERROR_LOADING_TILEMAP,	//3
+//	ERROR_LOADING_FONT,		//4
+//};
 
-enum Error
-{
-	ERROR_,
-	ERROR_LOADING_TEXTURE,	//1
-	ERROR_LOADING_SOUND,	//2
-	ERROR_LOADING_TILEMAP,	//3
-	ERROR_LOADING_FONT,		//4
-};
-
+/*
 class TileMap :public sf::Drawable, public sf::Transformable
 {
 private:
@@ -81,7 +79,7 @@ public:
 		return true;
 	}
 };
-
+*/
 template <typename T>
 const sf::Vector2f& getCenteringCoords(const sf::RenderTarget& target, const T entity, bool originInCenter = false) //sf::Sprite&
 {
@@ -124,32 +122,28 @@ public:
 
 
 
-void drawButtonScaledIfActive(float scale, sf::Sprite& button, bool& buttonActive, sf::RenderTarget& target)
-{
-	if (buttonActive && button.getScale().x < scale && button.getScale().y < scale)
-	{
-		button.setScale(scale, scale);
-		target.draw(button);
-	}
-	else if (!buttonActive)
-	{
-		button.setScale(1, 1);
-		target.draw(button);
-	}
-	else
-		target.draw(button);
-}
+//void drawButtonScaledIfActive(float scale, sf::Sprite& button, bool& buttonActive, sf::RenderTarget& target)
+//{
+//	if (buttonActive && button.getScale().x < scale && button.getScale().y < scale)
+//	{
+//		button.setScale(scale, scale);
+//		target.draw(button);
+//	}
+//	else if (!buttonActive)
+//	{
+//		button.setScale(1, 1);
+//		target.draw(button);
+//	}
+//	else
+//		target.draw(button);
+//}
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1600, 900), "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
-	//cursor
-	sf::Image cursorImg;
-	cursorImg.loadFromFile("textures\\cursor.png");
-	sf::Cursor cursor;
-	cursor.loadFromPixels(cursorImg.getPixelsPtr(), cursorImg.getSize(), { 0,0 });
-	window.setMouseCursor(cursor);
-	//_cursor
+	Game game;
+	game.initializeGame();
+	game.setCursor();
+	//sf::RenderWindow window(sf::VideoMode(1600, 900), "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
 
 	//fonts
 	/*sf::Font fontFullPack2025;
@@ -161,19 +155,19 @@ int main()
 	//_fonts
 
 	//menu
-	sf::Texture tBackground;
-	if (!tBackground.loadFromFile("textures\\background.jpg"))
-		return Error::ERROR_LOADING_TEXTURE;
-	sf::Sprite background(tBackground);
-	sf::Vector2f backgroundSize(tBackground.getSize().x, tBackground.getSize().y); //background size
-	sf::Texture tTitle;
-	if (!tTitle.loadFromFile("textures\\title.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	sf::Sprite title(tTitle);
+	//sf::Texture tBackground;
+	//if (!tBackground.loadFromFile("textures\\background.jpg"))
+	//	return Error::ERROR_LOADING_TEXTURE;
+	//sf::Sprite background(tBackground);
+	//sf::Vector2f backgroundSize(tBackground.getSize().x, tBackground.getSize().y); //background size
+	//sf::Texture tTitle;
+	//if (!tTitle.loadFromFile("textures\\title.png"))
+	//	return Error::ERROR_LOADING_TEXTURE;
+	//sf::Sprite title(tTitle);
 	//_menu
 
 	//buttons	
-	sf::Texture tButtonPlay;
+	/*sf::Texture tButtonPlay;
 	if (!tButtonPlay.loadFromFile("textures\\button_play.png"))
 		return Error::ERROR_LOADING_TEXTURE;
 	sf::Sprite buttonPlay(tButtonPlay);
@@ -184,7 +178,7 @@ int main()
 	sf::Texture tButtonExit;
 	if (!tButtonExit.loadFromFile("textures\\button_exit.png"))
 		return Error::ERROR_LOADING_TEXTURE;
-	sf::Sprite buttonExit(tButtonExit);
+	sf::Sprite buttonExit(tButtonExit);*/
 	//_buttons
 
 	//sounds
@@ -199,63 +193,63 @@ int main()
 	//_sounds
 
 	//map1
-	sf::Texture tLevel1;
+	/*Level level1;
+	std::vector<sf::Vector2f> trackLevel1_1920x1200
+	{ sf::Vector2f(1920.0f, 688.0f),
+	sf::Vector2f(1897.0f, 674.0f),
+	sf::Vector2f(1745.0f, 627.0f),
+	sf::Vector2f(1614.0f, 606.0f),
+	sf::Vector2f(1492.0f, 599.0f),
+	sf::Vector2f(1397.0f, 605.0f),
+	sf::Vector2f(865.0f, 607.0f),
+	sf::Vector2f(794.0f, 624.0f),
+	sf::Vector2f(694.0f, 680.0f),
+	sf::Vector2f(676.0f, 719.0f),
+	sf::Vector2f(690.0f, 751.0f),
+	sf::Vector2f(725.0f, 773.0f),
+	sf::Vector2f(783.0f, 799.0f),
+	sf::Vector2f(890.0f, 821.0f),
+	sf::Vector2f(1028.0f, 828.0f),
+	sf::Vector2f(1302.0f, 816.0f),
+	sf::Vector2f(1395.0f, 816.0f),
+	sf::Vector2f(1473.0f, 846.0f),
+	sf::Vector2f(1513.0f, 887.0f),
+	sf::Vector2f(1543.0f, 946.0f),
+	sf::Vector2f(1553.0f, 999.0f),
+	sf::Vector2f(1541.0f, 1035.0f),
+	sf::Vector2f(1491.0f, 1083.0f),
+	sf::Vector2f(1417.0f, 1106.0f),
+	sf::Vector2f(1323.0f, 1110.0f),
+	sf::Vector2f(958.0f, 1099.0f),
+	sf::Vector2f(0.0f, 1014.0f) };
+	level1.setTrack(trackLevel1_1920x1200);*/
+	/*sf::Texture tLevel1;
 	if (!tLevel1.loadFromFile("textures\\level_1.png"))
 		return Error::ERROR_LOADING_TEXTURE;
 	sf::Sprite level1(tLevel1);
-	sf::Vector2f level1Size(tLevel1.getSize().x, tLevel1.getSize().y);
+	sf::Vector2u level1Size(tLevel1.getSize().x, tLevel1.getSize().y);*/
 	//_map1
 
 	//enemies
-	Enemy hotdog(420, 4);
+	/*Enemy hotdog(420, 4);
 	if (!hotdog.load("textures\\hotdog.png", sf::Vector2f(40, 40)))
 		return Error::ERROR_LOADING_TEXTURE;
-	hotdog.setPosition(sf::Vector2f(1920*0.83333, 688*0.75));
-	std::vector<sf::Vector2f> trackLevel1_1920x1200
-		{sf::Vector2f(1920.0f, 688.0f),
-		sf::Vector2f(1897.0f, 674.0f),
-		sf::Vector2f(1745.0f, 627.0f),
-		sf::Vector2f(1614.0f, 606.0f),
-		sf::Vector2f(1492.0f, 599.0f),
-		sf::Vector2f(1397.0f, 605.0f),
-		sf::Vector2f(865.0f, 607.0f),
-		sf::Vector2f(794.0f, 624.0f),
-		sf::Vector2f(694.0f, 680.0f),
-		sf::Vector2f(676.0f, 719.0f),
-		sf::Vector2f(690.0f, 751.0f),
-		sf::Vector2f(725.0f, 773.0f),
-		sf::Vector2f(783.0f, 799.0f),
-		sf::Vector2f(890.0f, 821.0f),
-		sf::Vector2f(1028.0f, 828.0f),
-		sf::Vector2f(1302.0f, 816.0f),
-		sf::Vector2f(1395.0f, 816.0f),
-		sf::Vector2f(1473.0f, 846.0f),
-		sf::Vector2f(1513.0f, 887.0f),
-		sf::Vector2f(1543.0f, 946.0f),
-		sf::Vector2f(1553.0f, 999.0f),
-		sf::Vector2f(1541.0f, 1035.0f),
-		sf::Vector2f(1491.0f, 1083.0f),
-		sf::Vector2f(1417.0f, 1106.0f),
-		sf::Vector2f(1323.0f, 1110.0f),
-		sf::Vector2f(958.0f, 1099.0f),
-		sf::Vector2f(0.0f, 1014.0f)};
-	hotdog.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
+	hotdog.setPosition(sf::Vector2f(1920*0.83333, 688*0.75));	
+	hotdog.calculateTrack(trackLevel1_1920x1200, game.getWindow().getSize(), level1Size);
 	Enemy hotdog2(420, 10);
 	if (!hotdog2.load("textures\\hotdog2.png", sf::Vector2f(30, 30)))
 		return Error::ERROR_LOADING_TEXTURE;
 	hotdog2.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
-	hotdog2.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
+	hotdog2.calculateTrack(trackLevel1_1920x1200, game.getWindow().getSize(), level1Size);
 	bool hotdog2active = false;
 	Enemy hotdog3(420, 10);
 	if (!hotdog3.load("textures\\hotdog.png", sf::Vector2f(30, 30)))
 		return Error::ERROR_LOADING_TEXTURE;
 	hotdog3.setPosition(sf::Vector2f(-30, 98));
-	hotdog3.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
-	/*sf::Texture tHotdogLeft;
-	if (!tHotdogLeft.loadFromFile("hotdog_left.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	sf::Sprite hotdogLeft(tHotdogLeft);*/
+	hotdog3.calculateTrack(trackLevel1_1920x1200, game.getWindow().getSize(), level1Size);*/
 	//_enemies
+
+	/*
 
 	//0 - grass
 	//1 - bush
@@ -283,43 +277,42 @@ int main()
 	if (!map.load("textures\\testtextures.png", sf::Vector2u(45, 45), 20, 14))
 		return Error::ERROR_LOADING_TILEMAP;
 
-	int state = Player::PLAYER_IN_MENU;
+	*/
 
-	title.setPosition(getCenteringCoords(window, title).x, (window.getSize().y - title.getLocalBounds().height) * 0.14);
-	buttonPlay.setOrigin((buttonPlay.getGlobalBounds().width / 2), (buttonPlay.getGlobalBounds().height / 2));
-	buttonPlay.setPosition(window.getSize().x / 2, window.getSize().y*(5 / 8.0));
+	/*title.setPosition(getCenteringCoords(game.getWindow(), title).x, (game.getWindow().getSize().y - title.getLocalBounds().height) * 0.14);*/
+	/*buttonPlay.setOrigin((buttonPlay.getGlobalBounds().width / 2), (buttonPlay.getGlobalBounds().height / 2));
+	buttonPlay.setPosition(game.getWindow().getSize().x / 2, game.getWindow().getSize().y*(5 / 8.0));
 	sf::FloatRect buttonPlayBounds = buttonPlay.getGlobalBounds();
 	bool buttonPlayActive(false);
 	buttonOptions.setOrigin((buttonOptions.getGlobalBounds().width / 2), (buttonOptions.getGlobalBounds().height / 2));
-	buttonOptions.setPosition(window.getSize().x / 2, window.getSize().y*(6 / 8.0));
+	buttonOptions.setPosition(game.getWindow().getSize().x / 2, game.getWindow().getSize().y*(6 / 8.0));
 	sf::FloatRect buttonOptionsBounds = buttonOptions.getGlobalBounds();
 	bool buttonOptionsActive(false);
 	buttonExit.setOrigin((buttonExit.getGlobalBounds().width / 2), (buttonExit.getGlobalBounds().height / 2));
-	buttonExit.setPosition(window.getSize().x / 2, window.getSize().y*(7 / 8.0));
+	buttonExit.setPosition(game.getWindow().getSize().x / 2, game.getWindow().getSize().y*(7 / 8.0));
 	sf::FloatRect buttonExitBounds = buttonExit.getGlobalBounds();
-	bool buttonExitActive(false);
+	bool buttonExitActive(false);*/
 
-	sf::Clock clock;
-
-	window.setMouseCursorGrabbed(true);
-	while (window.isOpen())
+	//sf::Clock clock;
+	game.eventLoop();
+	/*while (game.getWindow().isOpen())
 	{
 		sf::Event event;
-		while (window.pollEvent(event))
+		while (game.getWindow().pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				game.getWindow().close();
 				break;
 			case sf::Event::GainedFocus:
-				window.setMouseCursorGrabbed(true);
+				game.getWindow().setMouseCursorGrabbed(true);
 				break;
 			case sf::Event::LostFocus:
-				window.setMouseCursorGrabbed(false);
+				game.getWindow().setMouseCursorGrabbed(false);
 				break;
 			case sf::Event::KeyPressed:
-				if (event.key.code == sf::Keyboard::Escape) window.close();
+				if (event.key.code == sf::Keyboard::Escape) state=Player::PLAYER_IN_MENU;
 				break;
 			case sf::Event::MouseMoved:
 				if (buttonPlayBounds.contains(event.mouseMove.x, event.mouseMove.y))
@@ -340,63 +333,60 @@ int main()
 				{
 					if (state == Player::PLAYER_IN_MENU)
 					{
-						sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+						sf::Vector2i mousePosition = sf::Mouse::getPosition(game.getWindow());
 						if (buttonPlayBounds.contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							state = Player::PLAYER_IN_GAME;
 							hotdog.resetTimer();
 							hotdog.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
-							hotdog.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
+							hotdog.calculateTrack(trackLevel1_1920x1200, game.getWindow().getSize(), level1Size);
 							hotdog2.resetTimer();
 							hotdog2.setPosition(sf::Vector2f(1920 * 0.83333, 688 * 0.75));
-							hotdog2.calculateTrack(trackLevel1_1920x1200, window.getSize(), level1Size);
+							hotdog2.calculateTrack(trackLevel1_1920x1200, game.getWindow().getSize(), level1Size);
 							clock.restart();
 						}
-							//state = Player::PLAYER_IN_GAME;
-							//hotdog.resetTimer();
 						if (buttonExitBounds.contains(static_cast<sf::Vector2f>(mousePosition)))
-							window.close();
+							game.getWindow().close();
 					}
-					else state = Player::PLAYER_IN_MENU;
 				}
 				break;
 			default:
 				break;
 			}
-		}
-
-		window.clear();
-		switch (state)
-		{
-		case Player::PLAYER_IN_MENU:
-			background.setScale((window.getSize().x / backgroundSize.x), (window.getSize().y / backgroundSize.y));
-			window.draw(background);
-			window.draw(title);
-			drawButtonScaledIfActive(1.1f, buttonPlay, buttonPlayActive, window);
-			drawButtonScaledIfActive(1.1f, buttonOptions, buttonOptionsActive, window);
-			drawButtonScaledIfActive(1.1f, buttonExit, buttonExitActive, window);
-			break;
-		case Player::PLAYER_IN_GAME:
-			level1.setScale((window.getSize().x / level1Size.x), (window.getSize().y / level1Size.y));
-			window.draw(level1);
-			hotdog.move();
-			window.draw(hotdog);
-			if (clock.getElapsedTime().asSeconds() > 2)
-			{
-				if (hotdog2active == false)
-					hotdog2.resetTimer();
-				hotdog2active = true;
-				hotdog2.move();
-				window.draw(hotdog2);
-			}
-			//hotdog.draw(window);
-			//clock.restart();
-			break;
-		default:
-			break;
-		}		
-		window.display();
-	}
+		}*/
+		
+	//	game.getWindow().clear();
+	//	switch (state)
+	//	{
+	//	case Player::PLAYER_IN_MENU:
+	//		background.setScale((game.getWindow().getSize().x / backgroundSize.x), (game.getWindow().getSize().y / backgroundSize.y));
+	//		game.getWindow().draw(background);
+	//		game.getWindow().draw(title);
+	//		drawButtonScaledIfActive(1.1f, buttonPlay, buttonPlayActive, game.getWindow());
+	//		drawButtonScaledIfActive(1.1f, buttonOptions, buttonOptionsActive, game.getWindow());
+	//		drawButtonScaledIfActive(1.1f, buttonExit, buttonExitActive, game.getWindow());
+	//		break;
+	//	case Player::PLAYER_IN_GAME:
+	//		level1.setScale((game.getWindow().getSize().x / level1Size.x), (game.getWindow().getSize().y / level1Size.y));
+	//		game.getWindow().draw(level1);
+	//		hotdog.move();
+	//		game.getWindow().draw(hotdog);
+	//		if (clock.getElapsedTime().asSeconds() > 2)
+	//		{
+	//			if (hotdog2active == false)
+	//				hotdog2.resetTimer();
+	//			hotdog2active = true;
+	//			hotdog2.move();
+	//			game.getWindow().draw(hotdog2);
+	//		}
+	//		//hotdog.draw(window);
+	//		//clock.restart();
+	//		break;
+	//	default:
+	//		break;
+	//	}		
+	//	game.getWindow().display();
+	//}
 
 	return 0;
 }
