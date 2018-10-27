@@ -4,62 +4,11 @@
 int Game::initializeGame()
 {
 	window.create(sf::VideoMode(1600, 900), "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
+	setCursor();
 	window.setMouseCursorGrabbed(true);
-	//buttons
-	/*m_tButtons.reserve(3);
-	m_buttons.reserve(3);
-	m_rButtons.reserve(3);
-	m_isButtonActive.reserve(3);*/
+	if (m_menu.load(window))
+		return ERROR_LOADING_MENU;
 
-	sf::Texture tPlay;
-	m_tButtons.push_back(tPlay);
-	sf::Texture tOptions;
-	m_tButtons.push_back(tOptions);
-	sf::Texture tExit;
-	m_tButtons.push_back(tExit);
-	sf::Sprite sPlay;
-	m_buttons.push_back(sPlay);
-	sf::Sprite sOptions;
-	m_buttons.push_back(sOptions);
-	sf::Sprite sExit;
-	m_buttons.push_back(sExit);
-	sf::FloatRect rPlay;
-	m_rButtons.push_back(rPlay);
-	sf::FloatRect rOptions;
-	m_rButtons.push_back(rOptions);
-	sf::FloatRect rExit;
-	m_rButtons.push_back(rExit);
-	bool isPlayActive;
-	m_isButtonActive.push_back(isPlayActive);
-	bool isOptionsActive;
-	m_isButtonActive.push_back(isOptionsActive);
-	bool isExitActive;
-	m_isButtonActive.push_back(isExitActive);
-
-	if (!m_tButtons[Button::BUTTON_PLAY].loadFromFile("textures\\button_play.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	m_buttons[Button::BUTTON_PLAY].setTexture(m_tButtons[Button::BUTTON_PLAY]);
-	m_buttons[Button::BUTTON_PLAY].setOrigin(m_buttons[Button::BUTTON_PLAY].getGlobalBounds().width / 2, m_buttons[Button::BUTTON_PLAY].getGlobalBounds().height / 2);
-	m_buttons[Button::BUTTON_PLAY].setPosition(window.getSize().x / 2, window.getSize().y*(5 / 8.0));
-	m_rButtons[Button::BUTTON_PLAY] = m_buttons[Button::BUTTON_PLAY].getGlobalBounds();
-	m_isButtonActive[Button::BUTTON_PLAY] = false;	
-
-	if (!m_tButtons[Button::BUTTON_OPTIONS].loadFromFile("textures\\button_options.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	m_buttons[Button::BUTTON_OPTIONS].setTexture(m_tButtons[Button::BUTTON_OPTIONS]);
-	m_buttons[Button::BUTTON_OPTIONS].setOrigin(m_buttons[Button::BUTTON_OPTIONS].getGlobalBounds().width / 2, m_buttons[Button::BUTTON_OPTIONS].getGlobalBounds().height / 2);
-	m_buttons[Button::BUTTON_OPTIONS].setPosition(window.getSize().x / 2, window.getSize().y*(6 / 8.0));
-	m_rButtons[Button::BUTTON_OPTIONS] = m_buttons[Button::BUTTON_OPTIONS].getGlobalBounds();
-	m_isButtonActive[Button::BUTTON_OPTIONS] = false;	
-	
-	if (!m_tButtons[Button::BUTTON_EXIT].loadFromFile("textures\\button_exit.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	m_buttons[Button::BUTTON_EXIT].setTexture(m_tButtons[Button::BUTTON_EXIT]);
-	m_buttons[Button::BUTTON_EXIT].setOrigin(m_buttons[Button::BUTTON_EXIT].getGlobalBounds().width / 2, m_buttons[Button::BUTTON_EXIT].getGlobalBounds().height / 2);
-	m_buttons[Button::BUTTON_EXIT].setPosition(window.getSize().x / 2, window.getSize().y*(7 / 8.0));
-	m_rButtons[Button::BUTTON_EXIT] = m_buttons[Button::BUTTON_EXIT].getGlobalBounds();
-	m_isButtonActive[Button::BUTTON_EXIT] = false;
-	//_buttons
 	//level
 	Level level;
 	m_levels.push_back(level);
@@ -100,23 +49,11 @@ int Game::initializeGame()
 	Enemy en2(100, 3);
 	m_enemies.push_back(en1);
 	m_enemies.push_back(en2);
-	//m_enemies.reserve(2);
 	m_enemies[0] = Enemy(420, 4);
 	m_enemies[0].load("textures\\hotdog.png", sf::Vector2f(40, 40));//todo: return error if not
-	//m_enemies[0].calculateTrack(m_levels[m_currentLevel].getTrack(), window.getSize(), m_levels[m_currentLevel].getSize());
 	m_enemies[1] = Enemy(420, 10);
 	m_enemies[1].load("textures\\hotdog2.png", sf::Vector2f(40, 40));//todo: err
-	//m_enemies[1].calculateTrack(m_levels[m_currentLevel].getTrack(), window.getSize(), m_levels[m_currentLevel].getSize());
-	//_enemies
-	if (!m_tBackground.loadFromFile("textures\\background.jpg"))
-		return Error::ERROR_LOADING_TEXTURE;
-	m_background.setTexture(m_tBackground);
-	//sf::Vector2f backgroundSize(tBackground.getSize().x, tBackground.getSize().y); //background size
-	if (!m_tTitle.loadFromFile("textures\\title.png"))
-		return Error::ERROR_LOADING_TEXTURE;
-	m_title.setTexture(m_tTitle);
-	m_title.setPosition(sf::Vector2f(((window.getSize().x - m_title.getGlobalBounds().width) / 2), ((window.getSize().y - m_title.getLocalBounds().height) * 0.14)));
-	
+	//_enemies	
 	return 0;
 }
 
@@ -155,18 +92,18 @@ void Game::eventLoop()
 				if (event.key.code == sf::Keyboard::Escape) m_playerState = Player::PLAYER_IN_MENU;
 				break;
 			case sf::Event::MouseMoved:
-				if (m_rButtons[Button::BUTTON_PLAY].contains(event.mouseMove.x, event.mouseMove.y))
-					m_isButtonActive[Button::BUTTON_PLAY] = true;
+				if (m_menu.getPlayBoundingBox().contains(event.mouseMove.x, event.mouseMove.y))
+					m_menu.setPlayActive(true);
 				else
-					m_isButtonActive[Button::BUTTON_PLAY] = false;
-				if (m_rButtons[Button::BUTTON_OPTIONS].contains(event.mouseMove.x, event.mouseMove.y))
-					m_isButtonActive[Button::BUTTON_OPTIONS] = true;
+					m_menu.setPlayActive(false);
+				if (m_menu.getOptionsBoundingBox().contains(event.mouseMove.x, event.mouseMove.y))
+					m_menu.setOptionsActive(true);
 				else
-					m_isButtonActive[Button::BUTTON_OPTIONS] = false;
-				if (m_rButtons[Button::BUTTON_EXIT].contains(event.mouseMove.x, event.mouseMove.y))
-					m_isButtonActive[Button::BUTTON_EXIT] = true;
+					m_menu.setOptionsActive(false);
+				if (m_menu.getExitBoundingBox().contains(event.mouseMove.x, event.mouseMove.y))
+					m_menu.setExitActive(true);
 				else
-					m_isButtonActive[Button::BUTTON_EXIT] = false;
+					m_menu.setExitActive(false);
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left)
@@ -174,18 +111,17 @@ void Game::eventLoop()
 					if (m_playerState == Player::PLAYER_IN_MENU)
 					{
 						sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-						if (m_rButtons[Button::BUTTON_PLAY].contains(static_cast<sf::Vector2f>(mousePosition)))
+						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
 							for (Enemy& enemy : m_enemies)
 							{							
-								//enemy.setPosition(m_levels[m_currentLevel].getStartCoords());
 								enemy.calculateTrack(m_levels[m_currentLevel].getTrack(), window.getSize(), m_levels[m_currentLevel].getSize());
 								enemy.resetTimer();
 							}
 							m_clock.restart();
 						}
-						else if (m_rButtons[Button::BUTTON_EXIT].contains(static_cast<sf::Vector2f>(mousePosition)))
+						else if (m_menu.getExitBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 							window.close();
 					}
 				}
@@ -204,14 +140,8 @@ void Game::display()
 	switch (m_playerState)
 	{
 	case Player::PLAYER_IN_MENU:
-		m_background.setScale((static_cast<double>(window.getSize().x) / m_tBackground.getSize().x),
-			(static_cast<double>(window.getSize().y) / m_tBackground.getSize().y));
-		window.draw(m_background);
-		window.draw(m_title);
-		for (int i = 0; i < m_buttons.size(); ++i)
-		{
-			drawButtons(i, 1.1);
-		}
+		m_menu.rescaleButtons(1.1);
+		window.draw(m_menu);
 		break;
 	case Player::PLAYER_IN_GAME:
 		m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(window.getSize().x) / m_levels[m_currentLevel].getSize().x),
@@ -242,21 +172,5 @@ void Game::display()
 		break;
 	}
 	window.display();
-}
-
-void Game::drawButtons(int btn, float scale)
-{
-	if (m_isButtonActive[btn] && m_buttons[btn].getScale().x < scale && m_buttons[btn].getScale().y < scale)
-	{
-		m_buttons[btn].setScale(scale, scale);
-		window.draw(m_buttons[btn]);
-	}
-	else if (!m_isButtonActive[btn])
-	{
-		m_buttons[btn].setScale(1, 1);
-		window.draw(m_buttons[btn]);
-	}
-	else
-		window.draw(m_buttons[btn]);
 }
 
