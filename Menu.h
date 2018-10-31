@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Image.hpp>
 #include "Button.h"
 #include "Error.h"
 

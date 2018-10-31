@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Image.hpp>
 #include <string>
 #include <vector>
 #include <cmath>
