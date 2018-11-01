@@ -14,9 +14,11 @@ int Menu::load(sf::RenderWindow& window)
 {
 	if (!m_tBackground.loadFromFile("textures\\background.jpg"))
 		return Error::ERROR_LOADING_TEXTURE;
+	//m_tBackground.setSmooth(true);
 	m_background.setTexture(m_tBackground);
 	if (!m_tTitle.loadFromFile("textures\\title.png"))
 		return Error::ERROR_LOADING_TEXTURE;
+	m_tTitle.setSmooth(true);
 	m_title.setTexture(m_tTitle);
 	m_title.setPosition(sf::Vector2f(((window.getSize().x - m_title.getGlobalBounds().width) / 2), ((window.getSize().y - m_title.getLocalBounds().height) * 0.14)));
 	int errorPlay(m_buttonPlay.load("textures\\button_play.png", window.getSize().x / 2, window.getSize().y*(5 / 8.0)));

@@ -11,6 +11,7 @@ int Button::load(const std::string& textureFile)
 {
 	if (!m_texture.loadFromFile(textureFile))
 		return Error::ERROR_LOADING_TEXTURE;
+	m_texture.setSmooth(true);
 	m_sprite.setTexture(m_texture);
 	m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);	
 	m_isActive = false;

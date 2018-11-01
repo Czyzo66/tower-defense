@@ -24,6 +24,7 @@ int Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 	m_size = enemySize;
 	if (!m_texture.loadFromFile(textureFile))
 		return Error::ERROR_LOADING_TEXTURE;
+	m_texture.setSmooth(true);
 	sf::Vector2i pos(0, 0);
 	sf::Vector2i textsize(112, 112);
 	m_left.setTexture(m_texture);
