@@ -40,40 +40,46 @@ int Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 	return 0;
 }
 
-bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY)
+//bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY)
+//{
+//	m_track = track;
+//	m_track.shrink_to_fit();
+//	for (int i = 0; i < m_track.capacity(); ++i)
+//	{
+//		m_track[i].x *= targetX / textureX;
+//		m_track[i].y *= targetY / textureY;
+//	}
+//	setPosition(m_track[0]);
+//	m_track.erase(m_track.begin());
+//	return true;
+//}
+//
+//bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize)
+//{
+//	m_track.clear();
+//	m_track = track;
+//	m_track.shrink_to_fit();
+//	for (sf::Vector2f& trackPoint : m_track)
+//	{
+//		trackPoint.x *= static_cast<double>(targetSize.x) / textureSize.x;
+//		trackPoint.y *= static_cast<double>(targetSize.y) / textureSize.y;		
+//	}
+//	setPosition(m_track[0]);
+//	m_track.erase(m_track.begin());
+//	return true;
+//}
+
+void Enemy::setTrack(Track& track)
 {
 	m_track = track;
-	m_track.shrink_to_fit();
-	for (int i = 0; i < m_track.capacity(); ++i)
-	{
-		m_track[i].x *= targetX / textureX;
-		m_track[i].y *= targetY / textureY;
-	}
-	setPosition(m_track[0]);
-	m_track.erase(m_track.begin());
-	return true;
+	setPosition(m_track.front());
 }
 
-bool Enemy::calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize)
-{
-	m_track.clear();
-	m_track = track;
-	m_track.shrink_to_fit();
-	for (sf::Vector2f& trackPoint : m_track)
-	{
-		trackPoint.x *= static_cast<double>(targetSize.x) / textureSize.x;
-		trackPoint.y *= static_cast<double>(targetSize.y) / textureSize.y;		
-	}
-	setPosition(m_track[0]);
-	m_track.erase(m_track.begin());
-	return true;
-}
-
-bool Enemy::setTrack(std::vector<sf::Vector2f>& track)
-{
-	m_track = track;
-	return true;
-}
+//bool Enemy::setTrack(std::vector<sf::Vector2f>& track)
+//{
+//	m_track = track;
+//	return true;
+//}
 
 bool Enemy::setPosition(sf::Vector2f position)
 {
@@ -90,8 +96,8 @@ bool Enemy::move()
 	//int delta = 100000; //debuging
 	if (m_track.empty())
 		return false;
-	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed / 50000; //magic number!
-	sf::Vector2f destination(m_track.at(0));
+	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed / 50000; //todo: magic number??
+	sf::Vector2f destination(m_track.front());
 	float angle;
 	if (destination.y != m_position.y && destination.x != m_position.x)
 		angle = atan((fabs(destination.x - m_position.x) / fabs(destination.y - m_position.y)));

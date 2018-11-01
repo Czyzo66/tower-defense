@@ -12,9 +12,9 @@ int Game::initializeGame()
 	//level
 	Level level;
 	m_levels.push_back(level);
-	m_levels[0].load("textures\\level_1.png");
+	m_levels[0].load("textures\\level_1.png", "levels\\level_1_track.png");
 	
-	std::vector<sf::Vector2f> trackLevel1_1920x1200
+	/*std::vector<sf::Vector2f> trackLevel1_1920x1200
 	{ sf::Vector2f(1920.0f, 688.0f),
 	sf::Vector2f(1897.0f, 674.0f),
 	sf::Vector2f(1745.0f, 627.0f),
@@ -42,7 +42,7 @@ int Game::initializeGame()
 	sf::Vector2f(1323.0f, 1110.0f),
 	sf::Vector2f(958.0f, 1099.0f),
 	sf::Vector2f(0.0f, 1014.0f) };
-	m_levels[m_currentLevel].setTrack(trackLevel1_1920x1200);
+	m_levels[m_currentLevel].setTrack(trackLevel1_1920x1200);*/
 	//_level
 	//enemies
 	Enemy en1(100, 5);
@@ -114,11 +114,15 @@ void Game::eventLoop()
 						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
-							for (Enemy& enemy : m_enemies)
+							/*for (Enemy& enemy : m_enemies)
 							{							
 								enemy.calculateTrack(m_levels[m_currentLevel].getTrack(), window.getSize(), m_levels[m_currentLevel].getSize());
 								enemy.resetTimer();
-							}
+							}*/
+							//m_enemies[0].calculateTrack(m_levels[m_currentLevel].getTrack(), window.getSize(), m_levels[m_currentLevel].getSize());
+							//m_enemies[0].resetTimer();
+							m_enemies[1].setTrack(m_levels[m_currentLevel].getTrack());
+							m_enemies[1].resetTimer();
 							m_clock.restart();
 						}
 						else if (m_menu.getExitBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))

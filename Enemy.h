@@ -4,6 +4,13 @@
 #include <vector>
 #include <cmath>
 #include "Error.h"
+#include "Track.h"
+
+/*
+ *	TODO:
+ *	Rework texture management (sprite.setTextureRect instead 3 separate sprites)
+ *	Rework Enemy::move for new track
+ */
 
 class Enemy : public sf::Drawable
 {
@@ -15,7 +22,7 @@ private:
 	sf::Sprite m_left;
 	sf::Sprite m_mid;
 	sf::Sprite m_right;
-	std::vector<sf::Vector2f> m_track;
+	Track m_track;
 	bool m_active;
 	int m_state;
 	int m_hp;
@@ -30,9 +37,10 @@ public:
 		STATE_RIGHT,
 	};
 	int load(const std::string& textureFile, sf::Vector2f enemySize);
-	bool calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY);
-	bool calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize);
-	bool setTrack(std::vector<sf::Vector2f>& track);
+	//bool calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY);
+	//bool calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize);
+	void setTrack(Track& track);
+	//bool setTrack(std::vector<sf::Vector2f>& track);
 	bool setPosition(sf::Vector2f position);
 	bool move();
 	void setActive(bool ac) { m_active = ac; };
