@@ -35,6 +35,7 @@ private:
 	std::vector<Level> m_levels;
 	int m_currentLevel;
 	Menu m_menu;
+	void releaseEnemy(int enemyIndex, sf::Time time);
 public:
 	int initializeGame();
 	const sf::RenderWindow& getWindow() const;
