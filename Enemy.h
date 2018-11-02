@@ -9,7 +9,7 @@
 /*
  *	TODO:
  *	Rework texture management (sprite.setTextureRect instead 3 separate sprites)
- *	Rework Enemy::move for new track
+ *	Check Enemy::move for new track - movement speed may be too high on curves
  */
 
 class Enemy : public sf::Drawable
@@ -29,7 +29,7 @@ private:
 	double m_speed;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 public:
-	Enemy(int hp, int speed) : m_hp(hp), m_speed(speed), m_position(sf::Vector2f(0, 0)), m_state(0), m_active(false) {}
+	Enemy(int hp, double speed) : m_hp(hp), m_speed(speed), m_position(sf::Vector2f(0, 0)), m_state(0), m_active(false) {}
 	enum State
 	{
 		STATE_LEFT,
@@ -42,6 +42,7 @@ public:
 	void setTrack(Track& track);
 	//bool setTrack(std::vector<sf::Vector2f>& track);
 	bool setPosition(sf::Vector2f position);
+	void move_test();	//TODO: remove?
 	bool move();
 	void setActive(bool ac) { m_active = ac; };
 	bool getActive() const { return m_active; };

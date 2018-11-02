@@ -38,6 +38,9 @@ int Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 	m_left.setScale(m_size.x / (m_texture.getSize().x / 3.0), m_size.y / m_texture.getSize().y);
 	m_mid.setScale(m_size.x / (m_texture.getSize().x / 3.0), m_size.y / (m_texture.getSize().y));
 	m_right.setScale(m_size.x / (m_texture.getSize().x / 3.0), m_size.y / m_texture.getSize().y);
+	m_left.setOrigin(m_texture.getSize().x / 6.0, m_texture.getSize().y);
+	m_mid.setOrigin(m_texture.getSize().x / 6.0, m_texture.getSize().y);
+	m_right.setOrigin(m_texture.getSize().x / 6.0, m_texture.getSize().y);
 	return 0;
 }
 
@@ -73,7 +76,7 @@ int Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 void Enemy::setTrack(Track& track)
 {
 	m_track = track;
-	setPosition(m_track.front());
+	setPosition(m_track.back());
 }
 
 //bool Enemy::setTrack(std::vector<sf::Vector2f>& track)
@@ -91,6 +94,27 @@ bool Enemy::setPosition(sf::Vector2f position)
 	return true;
 }
 
+void Enemy::move_test()
+{
+	//laggy!
+	sf::Time delta = m_clock.restart();
+	//int delta = 100000; //debuging
+	if (m_track.empty())
+		return;
+	double targetDistance = static_cast<double>(delta.asMicroseconds()) * m_speed;
+	sf::Vector2f destination(m_track.back());
+	double moveDistance(0); //sqrt(pow(destination.x, 2) + pow(destination.y, 2))
+	while (moveDistance < targetDistance)
+	{
+		moveDistance += sqrt(pow(destination.x - m_position.x, 2) + pow(destination.y - m_position.y, 2));
+		setPosition(destination);
+		//if (m_track.erase(m_track.begin()) == m_track.end()) return;
+		m_track.pop_back();
+		if (m_track.empty()) return;
+		destination = m_track.back();
+	}
+}
+
 bool Enemy::move()
 {
 	sf::Time delta = m_clock.restart();
@@ -98,7 +122,7 @@ bool Enemy::move()
 	if (m_track.empty())
 		return false;
 	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed / 50000; //todo: magic number??
-	sf::Vector2f destination(m_track.front());
+	sf::Vector2f destination(m_track.back());
 	float angle;
 	if (destination.y != m_position.y && destination.x != m_position.x)
 		angle = atan((fabs(destination.x - m_position.x) / fabs(destination.y - m_position.y)));
@@ -139,7 +163,7 @@ bool Enemy::move()
 	if (fabs(destination.x - m_position.x) <= fabs(movementVector.x) && fabs(destination.y - m_position.y) <= fabs(movementVector.y))
 	{
 		setPosition(destination);
-		m_track.erase(m_track.begin());
+		m_track.pop_back();
 	}
 	else
 	{

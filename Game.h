@@ -12,6 +12,10 @@
 #include "Error.h"
 #include "Menu.h"
 
+/*
+ *	TODO: Better error handling
+ */
+
 enum Player
 {
 	PLAYER_IN_MENU,
