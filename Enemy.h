@@ -8,8 +8,8 @@
 
 /*
  *	TODO:
- *	Rework texture management (sprite.setTextureRect instead 3 separate sprites)
- *	Check Enemy::move for new track - movement speed may be too high on curves
+ *	move(): function needs to be simpler/faster
+ *  move(): texture is not set correctly on bend - movement is not smooth, sprite is "blinking"
  */
 
 class Enemy : public sf::Drawable
@@ -19,9 +19,7 @@ private:
 	sf::Vector2f m_size;
 	sf::Vector2f m_position;
 	sf::Texture m_texture;
-	sf::Sprite m_left;
-	sf::Sprite m_mid;
-	sf::Sprite m_right;
+	sf::Sprite m_sprite;
 	Track m_track;
 	bool m_active;
 	int m_state;
@@ -37,14 +35,11 @@ public:
 		STATE_RIGHT,
 	};
 	int load(const std::string& textureFile, sf::Vector2f enemySize);
-	//bool calculateTrack(std::vector<sf::Vector2f>& track, int targetX, int targetY, int textureX, int textureY);
-	//bool calculateTrack(std::vector<sf::Vector2f>& track, sf::Vector2u targetSize, sf::Vector2u textureSize);
 	void setTrack(Track& track);
-	//bool setTrack(std::vector<sf::Vector2f>& track);
-	bool setPosition(sf::Vector2f position);
-	void move_test();	//TODO: remove?
+	void setPosition(sf::Vector2f position);
+	//void move_test();
 	bool move();
 	void setActive(bool ac) { m_active = ac; };
-	bool getActive() const { return m_active; };
+	bool isActive() const { return m_active; };
 	void resetTimer();
 };
