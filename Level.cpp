@@ -21,24 +21,6 @@ int Level::load(const std::string& textureFile, const std::string& trackTextureF
 	return 0;
 }
 
-//int Level::loadTrack(const std::string & trackTextureFile)
-//{
-//	sf::Image trackFile;
-//	if (!trackFile.loadFromFile(trackTextureFile))
-//		return Error::ERROR_LOADING_TEXTURE;
-//	m_track.push_back(m_startCoords);
-//	if(trackFile.getPixel(m_track.back().x - 1, m_track.back().y - 1) == sf::Color(255,0,0) &&
-//		m_track.back() != sf::Vector2f)
-//	return 0;
-//}
-
-//bool Level::setTrack(std::vector<sf::Vector2f>& track)
-//{
-//	m_track = track; 
-//	m_startCoords = m_track[0];
-//	return true;
-//}
-
 bool Level::setScale(sf::Vector2f scale)
 {
 	m_sprite.setScale(scale);

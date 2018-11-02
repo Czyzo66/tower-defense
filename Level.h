@@ -17,7 +17,6 @@ private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 public:
 	int load(const std::string& textureFile, const std::string& trackTextureFile);
-	//bool setTrack(std::vector<sf::Vector2f>& track);
 	Track& getTrack() { return m_track; }
 	sf::Vector2u getSize() { return m_texture.getSize(); }
 	sf::Vector2f getStartCoords() { return m_startCoords; }
