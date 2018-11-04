@@ -18,8 +18,8 @@ private:
 public:
 	int load(const std::string& textureFile, const std::string& trackTextureFile);
 	Track& getTrack() { return m_track; }
-	sf::Vector2u getSize() { return m_texture.getSize(); }
-	sf::Vector2f getStartCoords() { return m_startCoords; }
+	sf::Vector2u getSize() const { return m_texture.getSize(); }
+	sf::Vector2f getStartCoords() const { return m_startCoords; }
 	bool setScale(sf::Vector2f scale);	
 };
 
