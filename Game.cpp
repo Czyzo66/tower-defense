@@ -30,26 +30,21 @@ int Game::initializeGame()
 	//_level
 
 	//enemies
-	m_enemies.push_back(Enemy(420, 3));
-	m_enemies.push_back(Enemy(420, 8));
-	m_enemies.push_back(Enemy(420, 7));
-	m_enemies.push_back(Enemy(420, 6));
-	m_enemies.push_back(Enemy(420, 5));
-	m_enemies.push_back(Enemy(420, 4));
-	m_enemies.push_back(Enemy(420, 2));
-	m_enemies.push_back(Enemy(420, 1));
-	m_enemies.push_back(Enemy(420, 9));
-	m_enemies.push_back(Enemy(420, 10));
-	m_enemies[0].load("textures\\hotdog.png", sf::Vector2f(40, 40));//todo: return error if not
-	m_enemies[1].load("textures\\hotdog2.png", sf::Vector2f(40, 40));//todo: err
-	m_enemies[2].load("textures\\hotdog.png", sf::Vector2f(40, 40));
-	m_enemies[3].load("textures\\hotdog2.png", sf::Vector2f(40, 40));
-	m_enemies[4].load("textures\\hotdog.png", sf::Vector2f(40, 40));
-	m_enemies[5].load("textures\\hotdog2.png", sf::Vector2f(40, 40));
-	m_enemies[6].load("textures\\hotdog2.png", sf::Vector2f(40, 40));
-	m_enemies[7].load("textures\\hotdog.png", sf::Vector2f(40, 40));
-	m_enemies[8].load("textures\\hotdog.png", sf::Vector2f(40, 40));
-	m_enemies[9].load("textures\\hotdog2.png", sf::Vector2f(40, 40));
+	int numberOfEnemies = 100;
+	for (int i = 1; i < numberOfEnemies + 1; ++i)
+	{
+		m_enemies.push_back(Enemy(420, i/500000.0));
+	}
+
+	int ctr = 0;
+	for (Enemy& enemy : m_enemies)
+	{
+		if (ctr % 2 == 0)
+			enemy.load("textures\\hotdog2.png", sf::Vector2f(40, 40));
+		else
+			enemy.load("textures\\hotdog.png", sf::Vector2f(40, 40));
+		++ctr;
+	}
 	//_enemies	
 	return 0;
 }
@@ -144,16 +139,10 @@ void Game::display()
 		m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(window.getSize().x) / m_levels[m_currentLevel].getSize().x),
 			(static_cast<double>(window.getSize().y) / m_levels[m_currentLevel].getSize().y)));
 		window.draw(m_levels[m_currentLevel]);
-		releaseEnemy(0, sf::seconds(5));
-		releaseEnemy(1, sf::seconds(10));
-		releaseEnemy(2, sf::seconds(9));
-		releaseEnemy(3, sf::seconds(8));
-		releaseEnemy(4, sf::seconds(7));
-		releaseEnemy(5, sf::seconds(6));
-		releaseEnemy(6, sf::seconds(4));
-		releaseEnemy(7, sf::seconds(3));
-		releaseEnemy(8, sf::seconds(11));
-		releaseEnemy(9, sf::seconds(12));
+		for (int i = 0; i < m_enemies.size(); ++i)
+		{
+			releaseEnemy(i, sf::seconds(0));
+		}
 		break;
 	default:
 		break;
