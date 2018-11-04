@@ -8,8 +8,7 @@
 
 /*
  *	TODO:
- *	move(): function needs to be simpler/faster
- *  move(): texture is not set correctly on bend - movement is not smooth, sprite is "blinking"
+ *	move(): perhaps function should be simpler/faster
  */
 
 class Enemy : public sf::Drawable
@@ -37,9 +36,9 @@ public:
 	int load(const std::string& textureFile, sf::Vector2f enemySize);
 	void setTrack(Track& track);
 	void setPosition(sf::Vector2f position);
-	//void move_test();
 	bool move();
 	void setActive(bool ac) { m_active = ac; };
 	bool isActive() const { return m_active; };
+	double getSpeed() const { return m_speed; };
 	void resetTimer();
 };

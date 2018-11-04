@@ -30,34 +30,13 @@ void Enemy::setPosition(sf::Vector2f position)
 	m_sprite.setPosition(m_position);
 }
 
-//void Enemy::move_test()
-//{
-//	//laggy!
-//	sf::Time delta = m_clock.restart();
-//	//int delta = 100000; //debuging
-//	if (m_track.empty())
-//		return;
-//	double targetDistance = static_cast<double>(delta.asMicroseconds()) * m_speed;
-//	sf::Vector2f destination(m_track.back());
-//	double moveDistance(0); //sqrt(pow(destination.x, 2) + pow(destination.y, 2))
-//	while (moveDistance < targetDistance)
-//	{
-//		moveDistance += sqrt(pow(destination.x - m_position.x, 2) + pow(destination.y - m_position.y, 2));
-//		setPosition(destination);
-//		//if (m_track.erase(m_track.begin()) == m_track.end()) return;
-//		m_track.pop_back();
-//		if (m_track.empty()) return;
-//		destination = m_track.back();
-//	}
-//}
-
 bool Enemy::move()
 {
 	sf::Time delta = m_clock.restart();
 	//int delta = 100000; //debuging
 	if (m_track.empty())
 		return false;
-	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed / 50000; //todo: magic number??
+	double moveDistance = static_cast<double>(delta.asMicroseconds()) * m_speed;
 	sf::Vector2f destination(m_track.back());
 	float angle;
 	if (destination.y != m_position.y && destination.x != m_position.x)
@@ -86,20 +65,25 @@ bool Enemy::move()
 		movementVector.y = cos(angle) * moveDistance;
 	}
 
-	if (fabs(movementVector.x) <= fabs(movementVector.y) && m_state != Enemy::State::STATE_MID)
+	//1.2 and 0.8 factors are used to remove floating point inaccuracy influence when movement angle is close to 45 degrees
+	if(1.2*fabs(movementVector.x) < fabs(movementVector.y) && m_state != Enemy::State::STATE_MID)
 	{
 		m_sprite.setTextureRect(sf::IntRect(sf::Vector2i(112, 0), sf::Vector2i(112, 112)));
 		m_state = Enemy::State::STATE_MID;
 	}
-	else if(movementVector.x < 0 && m_state != Enemy::State::STATE_LEFT)
+	else if(0.8*fabs(movementVector.x) > fabs(movementVector.y))
 	{
-		m_sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(112, 112)));
-		m_state = Enemy::State::STATE_LEFT;
-	}
-	else if (movementVector.x > 0 && m_state != Enemy::State::STATE_RIGHT)
-	{
-		m_sprite.setTextureRect(sf::IntRect(sf::Vector2i(224, 0), sf::Vector2i(112, 112)));
-		m_state = Enemy::State::STATE_RIGHT;
+		if (movementVector.x < 0 && m_state != Enemy::State::STATE_LEFT)
+		{
+
+			m_sprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(112, 112)));
+			m_state = Enemy::State::STATE_LEFT;
+		}
+		else if (movementVector.x > 0 && m_state != Enemy::State::STATE_RIGHT)
+		{
+			m_sprite.setTextureRect(sf::IntRect(sf::Vector2i(224, 0), sf::Vector2i(112, 112)));
+			m_state = Enemy::State::STATE_RIGHT;
+		}
 	}
 
 	if (fabs(destination.x - m_position.x) <= fabs(movementVector.x) && fabs(destination.y - m_position.y) <= fabs(movementVector.y))
