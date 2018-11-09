@@ -1,12 +1,46 @@
 #include "Enemy.h"
 
+std::map<int, std::pair<double, double>> init(const std::string& propsFile)
+{
+	std::map<int, std::pair<double, double>> temp;
+	std::ifstream inf(propsFile);
+	assert(inf);
+	int ctr = 0;
+	double t1, t2;
+	while (inf >> t1 && inf >> t2)
+	{		
+		temp.insert(std::pair<int, std::pair<double, double>>(ctr, std::pair<double, double>(t1, t2)));
+		++ctr;
+	}
+	return temp;
+}
+
+std::map<int, std::pair<double, double>> Enemy::s_enemyProperties(init("enemy_properties.txt"));
+
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_sprite, states);
 }
 
+//int Enemy::loadProperties(const std::string& propsFile)
+//{
+//	std::fstream inf(propsFile);
+//	if (!inf) return Error::ERROR_LOADING_FILE;
+//	while (inf)
+//	{
+//		int ctr = 0;
+//		double t1, t2;
+//		inf >> t1;
+//		inf >> t2;
+//		s_enemyProperties.insert(std::pair<int,std::pair<double,double>>(ctr, std::pair<double, double>(t1, t2)));
+//		++ctr;
+//	}
+//	return 0;
+//}
+
 int Enemy::load(const std::string& textureFile, sf::Vector2f enemySize)
 {
+	//loadProperties("enemy_properties.txt");
 	m_size = enemySize;
 	if (!m_texture.loadFromFile(textureFile))
 		return Error::ERROR_LOADING_TEXTURE;
@@ -102,3 +136,4 @@ void Enemy::resetTimer()
 {
 	m_clock.restart();
 }
+
