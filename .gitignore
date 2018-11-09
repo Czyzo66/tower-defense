@@ -5,4 +5,5 @@ TowerDefenseSFML.aps
 TowerDefenseSFML.rc
 resource.h
 Debug/
+Release/
 oldResources/
