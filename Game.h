@@ -4,6 +4,7 @@
 #include <SFML/Window/Cursor.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Window/VideoMode.hpp>
 #include <string>
 #include <vector>
 #include <cmath>

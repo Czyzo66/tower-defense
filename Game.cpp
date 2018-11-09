@@ -17,23 +17,29 @@ void Game::releaseEnemy(int enemyIndex, sf::Time time)
 
 int Game::initializeGame()
 {
-	window.create(sf::VideoMode(1600, 900), "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
+	std::vector<sf::VideoMode> res(sf::VideoMode::getFullscreenModes());
+	window.create(res[0], "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
+	
 	setCursor();
 	window.setMouseCursorGrabbed(true);
-	if (m_menu.load(window))
-		return ERROR_LOADING_MENU;
+	int ret = 0;
+	ret = m_menu.load(window);
+	if (ret) return ret;
 
 	//level
 	Level level;
 	m_levels.push_back(level);
-	m_levels[0].load("levels\\level_1.png", "levels\\level_1_track.png");
+	ret = m_levels[0].load(window, "levels\\level_1.png", "levels\\level_1_track.png");
+	if (ret) return ret;
 	//_level
 
 	//enemies
-	int numberOfEnemies = 100;
+
+	//for testing:
+	int numberOfEnemies = 10;
 	for (int i = 1; i < numberOfEnemies + 1; ++i)
 	{
-		m_enemies.push_back(Enemy(420, i/500000.0));
+		m_enemies.push_back(Enemy(i%2));
 	}
 
 	int ctr = 0;
@@ -141,7 +147,7 @@ void Game::display()
 		window.draw(m_levels[m_currentLevel]);
 		for (int i = 0; i < m_enemies.size(); ++i)
 		{
-			releaseEnemy(i, sf::seconds(0));
+			releaseEnemy(i, sf::seconds(i));
 		}
 		break;
 	default:
