@@ -53,6 +53,7 @@ int Track::loadTrack(const std::string& trackTextureFile, const sf::Color color,
 		m_track.push_back(sf::Vector2f(endCoords.x, fileSize.y + 111));
 
 	m_track.push_back(endCoords);
+
 	int ret = loadFirstPointCoords(color); //first point
 	if (ret) return ret;
 	sf::Vector2f nextCoords(m_lastFoundCoords);
@@ -77,19 +78,17 @@ int Track::loadTrack(const std::string& trackTextureFile, const sf::Color color,
 		else if (m_trackTexture.getPixel(ptrNextCoords->x, --ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
 			save(nextCoords);
 		else if (++ptrNextCoords->x <= 0 || ptrNextCoords->y <= 0 || ptrNextCoords->x >= fileSize.x - 1 || ptrNextCoords->y >= fileSize.y - 1)
-		{
-			if (startCoords.x == 0)
-				m_track.push_back(sf::Vector2f(-112, startCoords.y));
-			else if (startCoords.y == 0)
-				m_track.push_back(sf::Vector2f(startCoords.x, -112));
-			else if (startCoords.x == fileSize.x - 1)
-				m_track.push_back(sf::Vector2f(fileSize.x + 111, startCoords.y));
-			else if (startCoords.y == fileSize.y - 1)
-				m_track.push_back(sf::Vector2f(startCoords.x, fileSize.y + 111));
-			return 0;
-		}
+			m_track.push_back(startCoords);
 		else return Error::ERROR_LOADING_TRACK;
 	}
+	if (startCoords.x == 0)
+		m_track.push_back(sf::Vector2f(-112, startCoords.y));
+	else if (startCoords.y == 0)
+		m_track.push_back(sf::Vector2f(startCoords.x, -112));
+	else if (startCoords.x == fileSize.x - 1)
+		m_track.push_back(sf::Vector2f(fileSize.x + 111, startCoords.y));
+	else if (startCoords.y == fileSize.y - 1)
+		m_track.push_back(sf::Vector2f(startCoords.x, fileSize.y + 111));
 	return 0;
 }
 
