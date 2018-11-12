@@ -5,13 +5,24 @@ void Game::releaseEnemy(int enemyIndex, sf::Time time)
 {
 	if (m_clock.getElapsedTime() > time)
 	{
-		if (m_enemies[enemyIndex].isActive() == false)
+		if (m_enemies[enemyIndex] == nullptr)
 		{
-			m_enemies[enemyIndex].resetTimer();
-			m_enemies[enemyIndex].setActive(true);
+			m_enemies.erase(m_enemies.begin() + enemyIndex);
+			m_enemies.shrink_to_fit();
+			return;
 		}
-		m_enemies[enemyIndex].move();
-		window.draw(m_enemies[enemyIndex]);
+		if (m_enemies[enemyIndex]->getTrack().empty())
+		{
+			m_enemies[enemyIndex].reset();
+			return;
+		}
+		if (m_enemies[enemyIndex]->isActive() == false)
+		{
+			m_enemies[enemyIndex]->resetTimer();
+			m_enemies[enemyIndex]->setActive(true);
+		}
+		m_enemies[enemyIndex]->move();
+		window.draw(*m_enemies[enemyIndex]);
 	}
 }
 
@@ -29,27 +40,16 @@ int Game::initializeGame()
 	//level
 	Level level;
 	m_levels.push_back(level);
-	ret = m_levels[0].load(window, "levels\\level_1.png", "levels\\level_1_track.png");
+	ret = m_levels[0].load(window, "levels\\level_1.png", "levels\\level_1_track.png", "levels\\level_1_data.txt");
 	if (ret) return ret;
 	//_level
 
 	//enemies
-
 	//for testing:
-	int numberOfEnemies = 10;
+	int numberOfEnemies = 20;
 	for (int i = 1; i < numberOfEnemies + 1; ++i)
 	{
-		m_enemies.push_back(Enemy(i%2));
-	}
-
-	int ctr = 0;
-	for (Enemy& enemy : m_enemies)
-	{
-		if (ctr % 2 == 0)
-			enemy.load("textures\\hotdog2.png", sf::Vector2f(40, 40));
-		else
-			enemy.load("textures\\hotdog.png", sf::Vector2f(40, 40));
-		++ctr;
+		m_enemies.push_back(std::unique_ptr<Enemy>(new Enemy(i%5)));
 	}
 	//_enemies	
 	return 0;
@@ -112,10 +112,15 @@ void Game::eventLoop()
 						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
-							for (Enemy& enemy : m_enemies)
-							{							
-								enemy.setTrack(m_levels[m_currentLevel].getTrack());
-								enemy.resetTimer();
+							int i = 0;
+							for (std::unique_ptr<Enemy>& enemy : m_enemies)
+							{
+								if(i < 10)
+									enemy->setTrack(m_levels[m_currentLevel].getTracks()[0]);
+								else
+									enemy->setTrack(m_levels[m_currentLevel].getTracks()[1]);
+								enemy->resetTimer();
+								++i;
 							}
 							m_clock.restart();
 						}

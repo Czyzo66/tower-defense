@@ -32,16 +32,16 @@ private:
 	sf::Cursor m_cursor;
 	int m_playerState;
 	std::vector<bool> m_isButtonActive;
-	std::vector<Enemy> m_enemies;
+	std::vector<std::unique_ptr<Enemy>> m_enemies;
 	std::vector<Level> m_levels;
 	int m_currentLevel;
 	Menu m_menu;
-	void releaseEnemy(int enemyIndex, sf::Time time);
+	void releaseEnemy(int enemyIndex, sf::Time time);//this functionality will be moved from Game
 public:
+	Game() : m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU) {};
 	int initializeGame();
 	const sf::RenderWindow& getWindow() const;
 	bool setCursor();
 	void eventLoop();
-	void display();
-	Game() : m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU) {};
+	void display();	
 };
