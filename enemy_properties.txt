@@ -1,2 +1,5 @@
-100 0.00014
-400 0.00006
+fast 100 0.00014 40 40 textures\hotdog2.png
+slow 400 0.00006 60 60 textures\hotdog.png
+duck1 77 0.00010 40 40 textures\kaczucha.png
+duck2 88 0.00009 50 50 textures\kaczucha2.png
+duck3 99 0.00008 60 60 textures\kaczucha3.png
