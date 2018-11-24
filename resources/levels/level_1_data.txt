@@ -1,0 +1,34 @@
+tracks:
+
+track0:
+start	[1919.0][450.0]
+end	[0.0][1037.0]
+color	[255][0][0]
+
+track1:
+start	[1919.0][730.0]
+end	[0.0][1037.0]
+color	[0][255][0]
+
+[end]tracks
+
+waves:
+
+wave0:
+track	[0]
+time	[1000]
+enemies:
+ID[0]	quantity[3]
+ID[1]	quantity[5]
+[end]wave0
+
+wave1:
+track	[1]
+time	[2000]
+enemies:
+ID[2]	quantity[4]
+ID[3]	quantity[3]
+ID[4]	quantity[2]
+[end]wave1
+
+[end]waves

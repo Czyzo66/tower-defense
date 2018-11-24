@@ -1,0 +1,5 @@
+fast 100 0.00014 40 40 resources\enemies\hotdog2.png
+slow 400 0.00006 60 60 resources\enemies\hotdog.png
+duck1 77 0.00010 40 40 resources\enemies\kaczucha.png
+duck2 88 0.00009 50 50 resources\enemies\kaczucha2.png
+duck3 99 0.00008 60 60 resources\enemies\kaczucha3.png

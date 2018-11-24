@@ -1,0 +1,15 @@
+resources\cursor.png
+resources\menu\background.jpg
+resources\menu\title.png
+resources\menu\button_play.png
+resources\menu\button_options.png
+resources\menu\button_exit.png
+resources\enemies\enemy_properties.txt
+resources\enemies\hotdog.png
+resources\enemies\hotdog2.png
+resources\enemies\kaczucha.png
+resources\enemies\kaczucha2.png
+resources\enemies\kaczucha3.png
+resources\levels\level_1_data.txt
+resources\levels\level_1_track.png
+resources\levels\level_1.png
