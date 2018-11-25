@@ -6,7 +6,7 @@
 
 namespace My
 {
-	class Texture : public Resource, public sf::Texture
+	class Texture : public sf::Texture
 	{
 	public:
 		bool loadFromFile(const std::string &filename, const sf::IntRect &area = sf::IntRect());
