@@ -29,11 +29,7 @@ int Level::load(const sf::RenderWindow& window, const std::string& trackTextureF
 	skipChars(inf);
 	while (inf.peek() != 'e')
 	{
-		/*Wave twave;
-		int ret = twave.loadFromFile(inf, &m_tracks);
-		if (ret) return ret;
-		m_waves.push_back(twave);*/
- 		m_waves.push_back(Wave(inf, &m_tracks)); // enemies sprite texture lost here!!!
+ 		m_waves.push_back(Wave(inf, &m_tracks));
 	}
 	return 0;
 }

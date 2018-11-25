@@ -12,11 +12,6 @@
 #include "Track.h"
 #include "EnemyProperties.h"
 
-/*
- *	TODO:
- *	move(): perhaps function should be simpler/faster
- */
-
 class Enemy : public GraphicsEntity
 {
 private:

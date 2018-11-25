@@ -107,7 +107,6 @@ void Track::loadTrack(const std::string& trackTextureFile, const sf::Color& colo
 	loadFirstPoint(color);
 	loadRemainingPoints(startCoords, color, textureSize);
 	loadOffscreenPoint(startCoords, textureSize);
-	//Error::ERROR_TRACK_IS_CORRUPTED can be thrown
 }
 
 void Track::loadFromFile(std::ifstream& inf, const std::string& trackTextureFile)
@@ -129,7 +128,6 @@ void Track::loadFromFile(std::ifstream& inf, const std::string& trackTextureFile
 	inf >> b;
 	skipChars(inf);
 	loadTrack(trackTextureFile, sf::Color(r, g, b), sf::Vector2f(startCoordsX, startCoordsY), sf::Vector2f(endCoordsX, endCoordsY));
-	//Error::ERROR_TRACK_LOADING_TEXTURE can be thrown
 }
 
 void Track::rescale(const sf::Vector2f& screenRes)

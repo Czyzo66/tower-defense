@@ -3,7 +3,6 @@
 #include "Resource.h"
 #include "Error.h"
 
-
 namespace My
 {
 	class Texture : public sf::Texture

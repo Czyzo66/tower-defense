@@ -1,31 +1,5 @@
 #include "Game.h"
 
-
-//void Game::releaseEnemy(int enemyIndex, sf::Time time)
-//{
-//	if (m_clock.getElapsedTime() > time)
-//	{
-//		if (m_enemies[enemyIndex] == nullptr)
-//		{
-//			m_enemies.erase(m_enemies.begin() + enemyIndex);
-//			m_enemies.shrink_to_fit();
-//			return;
-//		}
-//		if (m_enemies[enemyIndex]->getTrack().empty())
-//		{
-//			m_enemies[enemyIndex].reset();
-//			return;
-//		}
-//		if (m_enemies[enemyIndex]->isActive() == false)
-//		{
-//			m_enemies[enemyIndex]->resetTimer();
-//			m_enemies[enemyIndex]->setActive(true);
-//		}
-//		m_enemies[enemyIndex]->move();
-//		m_window.draw(*m_enemies[enemyIndex]);
-//	}
-//}
-
 int Game::setCursor()
 {
 	if (!m_iCursor.loadFromFile("resources\\cursor.png"))
