@@ -83,21 +83,9 @@ void Game::eventLoop()
 						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
-							Level level;
-							m_levels.push_back(level);
-							m_levels[0].load(m_window, "resources\\levels\\level_1.png", "resources\\levels\\level_1_track.png", "resources\\levels\\level_1_data.txt");
+							m_levels.push_back(Level(m_window, "resources\\levels\\level_1.png", "resources\\levels\\level_1_track.png", "resources\\levels\\level_1_data.txt"));
 							m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(m_window.getSize().x) / m_levels[m_currentLevel].getSize().x),
 								(static_cast<double>(m_window.getSize().y) / m_levels[m_currentLevel].getSize().y)));
-							/*int i = 0;
-							for (std::unique_ptr<Enemy>& enemy : m_enemies)
-							{
-								if(i < 10)
-									enemy->setTrack(m_levels[m_currentLevel].getTracks()[0]);
-								else
-									enemy->setTrack(m_levels[m_currentLevel].getTracks()[1]);
-								enemy->resetTimer();
-								++i;
-							}*/
 							m_clock.restart();
 						}
 						else if (m_menu.getExitBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
