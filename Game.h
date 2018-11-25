@@ -20,13 +20,15 @@
 enum Player
 {
 	PLAYER_IN_MENU,
+	PLAYER_IN_MENU_OPTIONS,
+	PLAYER_IN_MENU_LEVEL_SELECTION,
 	PLAYER_IN_GAME,
 };
 
 class Game
 {
 private:
-	sf::RenderWindow window;
+	sf::RenderWindow m_window;
 	sf::Clock m_clock;
 	sf::Image m_iCursor;
 	sf::Cursor m_cursor;
@@ -36,12 +38,15 @@ private:
 	std::vector<Level> m_levels;
 	int m_currentLevel;
 	Menu m_menu;
-	void releaseEnemy(int enemyIndex, sf::Time time);//this functionality will be moved from Game
 public:
-	Game() : m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU) {};
-	int initializeGame();
-	const sf::RenderWindow& getWindow() const;
-	bool setCursor();
+	Game() : m_window(std::vector<sf::VideoMode>(sf::VideoMode::getFullscreenModes())[0], "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen),
+		m_menu(m_window.getSize()), m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU) 
+	{
+		setCursor();
+		m_window.setMouseCursorGrabbed(true);
+	};
+	const sf::RenderWindow& getWindow() const { return m_window; }
+	int setCursor();
 	void eventLoop();
 	void display();	
 };
