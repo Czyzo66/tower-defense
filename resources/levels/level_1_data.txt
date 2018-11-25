@@ -16,7 +16,7 @@ waves:
 
 wave0:
 track	[0]
-time	[1000]
+time	[5000]
 enemies:
 ID[0]	quantity[3]
 ID[1]	quantity[5]
@@ -24,7 +24,7 @@ ID[1]	quantity[5]
 
 wave1:
 track	[1]
-time	[2000]
+time	[10000]
 enemies:
 ID[2]	quantity[4]
 ID[3]	quantity[3]
