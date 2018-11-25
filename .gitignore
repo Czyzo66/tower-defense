@@ -3,7 +3,6 @@ TowerDefenseSFML.vcxproj.filters
 TowerDefenseSFML.vcxproj.user
 TowerDefenseSFML.aps
 TowerDefenseSFML.rc
-resource.h
 Debug/
 Release/
 oldResources/
