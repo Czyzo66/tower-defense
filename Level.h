@@ -16,7 +16,8 @@ private:
 	std::vector<Wave> m_waves;
 	void skipChars(std::ifstream& inf) const;
 public:
-	int load(const sf::RenderWindow& window, const std::string& textureFile, const std::string& trackTextureFile, const std::string& trackDataFile);
+	Level(const sf::RenderWindow& window, const std::string& textureFile, const std::string& trackTextureFile, const std::string& trackDataFile);
+	int load(const sf::RenderWindow& window, const std::string& trackTextureFile, const std::string& trackDataFile);
 	const std::vector<Track>& getTracks() const { return m_tracks; }
 	std::vector<Wave>& getWaves() { return m_waves; }
 	sf::Vector2u getSize() const { return m_texture.getSize(); }
