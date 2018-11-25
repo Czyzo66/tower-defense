@@ -43,7 +43,7 @@ int Wave::loadFromFile(std::ifstream & inf, std::vector<Track>* ptrTracks)
 
 void Wave::release(sf::Clock& clock)
 {
-	if (!m_active && clock.getElapsedTime().asMilliseconds() == m_startTime.asMilliseconds())
+	if (!m_active && clock.getElapsedTime().asMilliseconds() >= m_startTime.asMilliseconds())
 	{
 		m_active = true;
 		for (Enemy& enemy : m_enemies)
