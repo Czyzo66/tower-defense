@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cassert>
 #include "Error.h"
+#include "GraphicsEntity.h"
 #include "Track.h"
 #include "EnemyProperties.h"
 
@@ -16,38 +17,37 @@
  *	move(): perhaps function should be simpler/faster
  */
 
-class Enemy : public sf::Drawable
+class Enemy : public GraphicsEntity
 {
 private:
 	static std::map<int, EnemyProperties> s_enemyProperties;
 	sf::Clock m_clock;
 	sf::Vector2f m_size;
-	sf::Vector2f m_position;
-	sf::Texture m_texture;
-	sf::Sprite m_sprite;
-	Track m_track;
+	const Track* m_trackPtr;
+	int m_trackCounter;
 	bool m_active;
 	int m_state;
+	int m_id;
 	double m_hp;
 	double m_speed;
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void init();
 public:	
-	Enemy(const int id);
+	Enemy(const int id, const Track* trackPtr);
 	enum State
 	{
 		STATE_LEFT,
 		STATE_MID,
 		STATE_RIGHT,
-	};
-	int load(const std::string& textureFile);
-	void setTrack(Track track);
-	void setPosition(sf::Vector2f position);
-	bool move();
-	void setActive(bool ac) { m_active = ac; };
-	const bool isActive() const { return m_active; };
-	const double getSpeed() const { return m_speed; };
-	const Track& getTrack() const { return m_track; };
+		STATE_REACHED_END,
+		STATE_ERROR_LOADING_TRACK,
+	};	
 	void resetTimer();
-	virtual ~Enemy() {};
+	void move();
+	void setTrack(const Track* track);
+	void setActive(bool ac) { m_active = ac; }	
+	bool isActive() const { return m_active; }
+	double getSpeed() const { return m_speed; }
+	const Track& getTrack() const { return *m_trackPtr; }
+	virtual ~Enemy() {}
 };
 
