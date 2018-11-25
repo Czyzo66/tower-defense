@@ -1,6 +1,6 @@
 #include "Track.h"
 
-int Track::loadFirstPointCoords(const sf::Color color)
+void Track::loadFirstPoint(const sf::Color& color)
 {
 	sf::Vector2f nextCoords = m_track.back();
 	sf::Vector2u fileSize = m_trackTexture.getSize();
@@ -20,84 +20,119 @@ int Track::loadFirstPointCoords(const sf::Color color)
 		saveAndPush(nextCoords);
 	else if (m_trackTexture.getPixel(nextCoords.x, --nextCoords.y) == color && nextCoords.x > 0)
 		save(nextCoords);
-	else return Error::ERROR_LOADING_TRACK;
-	return 0;
+	else return;// Error::ERROR_TRACK_IS_CORRUPTED;
 }
 
-void Track::save(sf::Vector2f& point)
+void Track::loadRemainingPoints(const sf::Vector2f& startCoords, const sf::Color& color, const sf::Vector2u& textureSize)
 {
-	m_secondLastFoundCoords = m_lastFoundCoords;
-	m_lastFoundCoords = point;
-}
-
-void Track::saveAndPush(sf::Vector2f& point)
-{
-	m_track.push_back(point);
-	m_secondLastFoundCoords = m_lastFoundCoords;
-	m_lastFoundCoords = point;
-}
-
-int Track::loadTrack(const std::string& trackTextureFile, const sf::Color color, const sf::Vector2f& startCoords, const sf::Vector2f& endCoords)
-{
-	if (!m_trackTexture.loadFromFile(trackTextureFile))
-		return Error::ERROR_LOADING_TEXTURE;
-	sf::Vector2u fileSize = m_trackTexture.getSize();
-
-	if (endCoords.x == 0)
-		m_track.push_back(sf::Vector2f(-112, endCoords.y));
-	else if (endCoords.y == 0)
-		m_track.push_back(sf::Vector2f(endCoords.x, -112));
-	else if (endCoords.x == fileSize.x - 1)
-		m_track.push_back(sf::Vector2f(fileSize.x + 111, endCoords.y));
-	else if (endCoords.y == fileSize.y - 1)
-		m_track.push_back(sf::Vector2f(endCoords.x, fileSize.y + 111));
-
-	m_track.push_back(endCoords);
-
-	int ret = loadFirstPointCoords(color); //first point
-	if (ret) return ret;
-	sf::Vector2f nextCoords(m_lastFoundCoords);
+	sf::Vector2f nextCoords(m_lastFoundPoint);
 	sf::Vector2f *ptrNextCoords = &nextCoords;
 	while (m_track.back() != startCoords)
 	{
-		nextCoords = m_lastFoundCoords;
-		if (m_trackTexture.getPixel(--ptrNextCoords->x, --ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		nextCoords = m_lastFoundPoint;
+		if (m_trackTexture.getPixel(--ptrNextCoords->x, --ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			saveAndPush(nextCoords);
-		else if (m_trackTexture.getPixel(++ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(++ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			save(nextCoords);
-		else if (m_trackTexture.getPixel(++ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(++ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			saveAndPush(nextCoords);
-		else if (m_trackTexture.getPixel(ptrNextCoords->x, ++ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(ptrNextCoords->x, ++ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			save(nextCoords);
-		else if (m_trackTexture.getPixel(ptrNextCoords->x, ++ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(ptrNextCoords->x, ++ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			saveAndPush(nextCoords);
-		else if (m_trackTexture.getPixel(--ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(--ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			save(nextCoords);
-		else if (m_trackTexture.getPixel(--ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(--ptrNextCoords->x, ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			saveAndPush(nextCoords);
-		else if (m_trackTexture.getPixel(ptrNextCoords->x, --ptrNextCoords->y) == color && *ptrNextCoords != m_secondLastFoundCoords)
+		else if (m_trackTexture.getPixel(ptrNextCoords->x, --ptrNextCoords->y) == color && *ptrNextCoords != m_secondlastFoundPoint)
 			save(nextCoords);
-		else if (++ptrNextCoords->x <= 0 || ptrNextCoords->y <= 0 || ptrNextCoords->x >= fileSize.x - 1 || ptrNextCoords->y >= fileSize.y - 1)
+		else if (++ptrNextCoords->x <= 0 || ptrNextCoords->y <= 0 || ptrNextCoords->x >= textureSize.x - 1 || ptrNextCoords->y >= textureSize.y - 1)
 			m_track.push_back(startCoords);
-		else return Error::ERROR_LOADING_TRACK;
+		else return;// Error::ERROR_TRACK_IS_CORRUPTED;
 	}
-	if (startCoords.x == 0)
-		m_track.push_back(sf::Vector2f(-112, startCoords.y));
-	else if (startCoords.y == 0)
-		m_track.push_back(sf::Vector2f(startCoords.x, -112));
-	else if (startCoords.x == fileSize.x - 1)
-		m_track.push_back(sf::Vector2f(fileSize.x + 111, startCoords.y));
-	else if (startCoords.y == fileSize.y - 1)
-		m_track.push_back(sf::Vector2f(startCoords.x, fileSize.y + 111));
-	return 0;
 }
 
-bool Track::empty() const
+void Track::loadOffscreenPoint(const sf::Vector2f& startOrEndCoords, const sf::Vector2u& textureSize)
 {
-	return m_track.empty();
+	if (startOrEndCoords.x == 0)
+		m_track.push_back(sf::Vector2f(-100, startOrEndCoords.y));
+	else if (startOrEndCoords.y == 0)
+		m_track.push_back(sf::Vector2f(startOrEndCoords.x, -100));
+	else if (startOrEndCoords.x == textureSize.x - 1)
+		m_track.push_back(sf::Vector2f(textureSize.x + 99, startOrEndCoords.y));
+	else if (startOrEndCoords.y == textureSize.y - 1)
+		m_track.push_back(sf::Vector2f(startOrEndCoords.x, textureSize.y + 99));
 }
 
-void Track::rescale(sf::Vector2f screenRes)
+void Track::save(const sf::Vector2f& point)
+{
+	m_secondlastFoundPoint = m_lastFoundPoint;
+	m_lastFoundPoint = point;
+}
+
+void Track::saveAndPush(const sf::Vector2f& point)
+{
+	m_track.push_back(point);
+	m_secondlastFoundPoint = m_lastFoundPoint;
+	m_lastFoundPoint = point;
+}
+
+void Track::skipChars(std::ifstream & inf) const
+{
+	char ch = 0;
+	while (ch != '[')
+		inf >> ch;
+}
+
+Track::Track(const std::string & trackTextureFile, const sf::Color & color, const sf::Vector2f & startCoords, const sf::Vector2f & endCoords)
+{
+	loadTrack(trackTextureFile, color, startCoords, endCoords);
+}
+
+Track::Track(std::ifstream & inf, const std::string & trackTextureFile)
+{
+	loadFromFile(inf, trackTextureFile);
+}
+
+void Track::loadTrack(const std::string& trackTextureFile, const sf::Color& color, const sf::Vector2f& startCoords, const sf::Vector2f& endCoords)
+{
+	if (!m_trackTexture.loadFromFile(trackTextureFile))
+	{
+		throw Error::ERROR_TRACK_LOADING_TEXTURE;
+		return;
+	}		
+	sf::Vector2u textureSize = m_trackTexture.getSize();
+	loadOffscreenPoint(endCoords, textureSize);
+	m_track.push_back(endCoords);
+	loadFirstPoint(color);
+	loadRemainingPoints(startCoords, color, textureSize);
+	loadOffscreenPoint(startCoords, textureSize);
+	//Error::ERROR_TRACK_IS_CORRUPTED can be thrown
+}
+
+void Track::loadFromFile(std::ifstream& inf, const std::string& trackTextureFile)
+{
+	float startCoordsX, startCoordsY, endCoordsX, endCoordsY;
+	int r, g, b;
+	inf >> startCoordsX;
+	skipChars(inf);
+	inf >> startCoordsY;
+	skipChars(inf);
+	inf >> endCoordsX;
+	skipChars(inf);
+	inf >> endCoordsY;
+	skipChars(inf);
+	inf >> r;
+	skipChars(inf);
+	inf >> g;
+	skipChars(inf);
+	inf >> b;
+	skipChars(inf);
+	loadTrack(trackTextureFile, sf::Color(r, g, b), sf::Vector2f(startCoordsX, startCoordsY), sf::Vector2f(endCoordsX, endCoordsY));
+	//Error::ERROR_TRACK_LOADING_TEXTURE can be thrown
+}
+
+void Track::rescale(const sf::Vector2f& screenRes)
 {
 	for (sf::Vector2f& point : m_track)
 	{
@@ -106,7 +141,7 @@ void Track::rescale(sf::Vector2f screenRes)
 	}
 }
 
-void Track::rescale(sf::Vector2u screenRes)
+void Track::rescale(const sf::Vector2u& screenRes)
 {
 	for (sf::Vector2f& point : m_track)
 	{
@@ -115,42 +150,12 @@ void Track::rescale(sf::Vector2u screenRes)
 	}
 }
 
-void Track::rescale(float resX, float resY)
+void Track::rescale(const float resX, const float resY)
 {
 	rescale(sf::Vector2f(resX, resY));
 }
 
-void Track::rescale(sf::RenderTarget& target)
+void Track::rescale(const sf::RenderTarget& target)
 {
 	rescale(target.getSize());
-}
-
-sf::Vector2f& Track::back()
-{
-	return m_track.back();
-}
-
-sf::Vector2f& Track::front()
-{
-	return m_track.front();
-}
-
-std::vector<sf::Vector2f>::iterator Track::begin()
-{
-	return m_track.begin();
-}
-
-std::vector<sf::Vector2f>::iterator Track::end()
-{
-	return m_track.end();
-}
-
-std::vector<sf::Vector2f>::iterator Track::erase(std::vector<sf::Vector2f>::iterator itr)
-{
-	return m_track.erase(itr);
-}
-
-void Track::pop_back()
-{
-	m_track.pop_back();
 }
