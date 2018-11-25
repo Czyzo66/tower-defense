@@ -29,6 +29,14 @@ GraphicsEntity::GraphicsEntity(const std::string& textureFile, const float x, co
 {
 }
 
+GraphicsEntity::GraphicsEntity(const GraphicsEntity & graphicsEntity)
+{
+	m_texture = graphicsEntity.m_texture;
+	m_sprite = graphicsEntity.m_sprite;
+	m_position = graphicsEntity.m_position;
+	m_sprite.setTexture(m_texture);
+}
+
 void GraphicsEntity::setPosition(const sf::Vector2f & position)
 {
 	m_position = position;

@@ -23,6 +23,7 @@ public:
 	GraphicsEntity(const std::string& textureFile);
 	GraphicsEntity(const std::string& textureFile, const sf::Vector2f& position);
 	GraphicsEntity(const std::string& textureFile, const float x, const float y);
+	GraphicsEntity(const GraphicsEntity& graphicsEntity);
 
 	virtual void setPosition(const sf::Vector2f& position);
 	virtual void setPosition(const float x, const float y);
