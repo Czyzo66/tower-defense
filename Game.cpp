@@ -1,93 +1,64 @@
 #include "Game.h"
 
 
-void Game::releaseEnemy(int enemyIndex, sf::Time time)
+//void Game::releaseEnemy(int enemyIndex, sf::Time time)
+//{
+//	if (m_clock.getElapsedTime() > time)
+//	{
+//		if (m_enemies[enemyIndex] == nullptr)
+//		{
+//			m_enemies.erase(m_enemies.begin() + enemyIndex);
+//			m_enemies.shrink_to_fit();
+//			return;
+//		}
+//		if (m_enemies[enemyIndex]->getTrack().empty())
+//		{
+//			m_enemies[enemyIndex].reset();
+//			return;
+//		}
+//		if (m_enemies[enemyIndex]->isActive() == false)
+//		{
+//			m_enemies[enemyIndex]->resetTimer();
+//			m_enemies[enemyIndex]->setActive(true);
+//		}
+//		m_enemies[enemyIndex]->move();
+//		m_window.draw(*m_enemies[enemyIndex]);
+//	}
+//}
+
+int Game::setCursor()
 {
-	if (m_clock.getElapsedTime() > time)
-	{
-		if (m_enemies[enemyIndex] == nullptr)
-		{
-			m_enemies.erase(m_enemies.begin() + enemyIndex);
-			m_enemies.shrink_to_fit();
-			return;
-		}
-		if (m_enemies[enemyIndex]->getTrack().empty())
-		{
-			m_enemies[enemyIndex].reset();
-			return;
-		}
-		if (m_enemies[enemyIndex]->isActive() == false)
-		{
-			m_enemies[enemyIndex]->resetTimer();
-			m_enemies[enemyIndex]->setActive(true);
-		}
-		m_enemies[enemyIndex]->move();
-		window.draw(*m_enemies[enemyIndex]);
-	}
-}
-
-int Game::initializeGame()
-{
-	std::vector<sf::VideoMode> res(sf::VideoMode::getFullscreenModes());
-	window.create(res[0], "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen);
-	
-	setCursor();
-	window.setMouseCursorGrabbed(true);
-	int ret = 0;
-	ret = m_menu.load(window);
-	if (ret) return ret;
-
-	//level
-	Level level;
-	m_levels.push_back(level);
-	ret = m_levels[0].load(window, "levels\\level_1.png", "levels\\level_1_track.png", "levels\\level_1_data.txt");
-	if (ret) return ret;
-	//_level
-
-	//enemies
-	//for testing:
-	int numberOfEnemies = 20;
-	for (int i = 1; i < numberOfEnemies + 1; ++i)
-	{
-		m_enemies.push_back(std::unique_ptr<Enemy>(new Enemy(i%5)));
-	}
-	//_enemies	
-	return 0;
-}
-
-const sf::RenderWindow& Game::getWindow() const
-{
-	return window;
-}
-
-bool Game::setCursor()
-{
-	m_iCursor.loadFromFile("textures\\cursor.png");
+	if (!m_iCursor.loadFromFile("resources\\cursor.png"))
+		return Error::ERROR_GAME_LOADING_CURSOR;
 	m_cursor.loadFromPixels(m_iCursor.getPixelsPtr(), m_iCursor.getSize(), { 0,0 });
-	window.setMouseCursor(m_cursor);
-	return true;
+	m_window.setMouseCursor(m_cursor);
+	return 0;
 }
 
 void Game::eventLoop()
 {
-	while (window.isOpen())
+	while (m_window.isOpen())
 	{
 		sf::Event event;
-		while (window.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				m_window.close();
 				break;
 			case sf::Event::GainedFocus:
-				window.setMouseCursorGrabbed(true);
+				m_window.setMouseCursorGrabbed(true);
 				break;
 			case sf::Event::LostFocus:
-				window.setMouseCursorGrabbed(false);
+				m_window.setMouseCursorGrabbed(false);
 				break;
 			case sf::Event::KeyPressed:
-				if (event.key.code == sf::Keyboard::Escape) m_playerState = Player::PLAYER_IN_MENU;
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					m_playerState = Player::PLAYER_IN_MENU;
+					m_levels.clear();
+				}
 				break;
 			case sf::Event::MouseMoved:
 				if (m_menu.getPlayBoundingBox().contains(event.mouseMove.x, event.mouseMove.y))
@@ -108,11 +79,16 @@ void Game::eventLoop()
 				{
 					if (m_playerState == Player::PLAYER_IN_MENU)
 					{
-						sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+						sf::Vector2i mousePosition = sf::Mouse::getPosition(m_window);
 						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
-							int i = 0;
+							Level level;
+							m_levels.push_back(level);
+							m_levels[0].load(m_window, "resources\\levels\\level_1.png", "resources\\levels\\level_1_track.png", "resources\\levels\\level_1_data.txt");
+							m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(m_window.getSize().x) / m_levels[m_currentLevel].getSize().x),
+								(static_cast<double>(m_window.getSize().y) / m_levels[m_currentLevel].getSize().y)));
+							/*int i = 0;
 							for (std::unique_ptr<Enemy>& enemy : m_enemies)
 							{
 								if(i < 10)
@@ -121,11 +97,11 @@ void Game::eventLoop()
 									enemy->setTrack(m_levels[m_currentLevel].getTracks()[1]);
 								enemy->resetTimer();
 								++i;
-							}
+							}*/
 							m_clock.restart();
 						}
 						else if (m_menu.getExitBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
-							window.close();
+							m_window.close();
 					}
 				}
 				break;
@@ -139,25 +115,23 @@ void Game::eventLoop()
 
 void Game::display()
 {
-	window.clear();
+	m_window.clear();
 	switch (m_playerState)
 	{
 	case Player::PLAYER_IN_MENU:
-		m_menu.rescaleButtons(1.1);
-		window.draw(m_menu);
+		m_menu.rescaleButtons(1.1f);
+		m_window.draw(m_menu);
 		break;
-	case Player::PLAYER_IN_GAME:
-		m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(window.getSize().x) / m_levels[m_currentLevel].getSize().x),
-			(static_cast<double>(window.getSize().y) / m_levels[m_currentLevel].getSize().y)));
-		window.draw(m_levels[m_currentLevel]);
-		for (int i = 0; i < m_enemies.size(); ++i)
+	case Player::PLAYER_IN_GAME:		
+		m_window.draw(m_levels[m_currentLevel]);
+		for (Wave& wave : m_levels[m_currentLevel].getWaves())
 		{
-			releaseEnemy(i, sf::seconds(i));
+			wave.release(m_clock);
+			m_window.draw(wave);
 		}
-		break;
 	default:
 		break;
 	}
-	window.display();
+	m_window.display();
 }
 
