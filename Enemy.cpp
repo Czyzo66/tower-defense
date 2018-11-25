@@ -19,7 +19,7 @@ std::map<int, EnemyProperties> initProps(const std::string& propsFile)
 	return temp;
 }
 
-std::map<int, EnemyProperties> Enemy::s_enemyProperties(initProps("enemies\\enemy_properties.txt"));
+std::map<int, EnemyProperties> Enemy::s_enemyProperties(initProps("resources\\enemies\\enemy_properties.txt"));
 
 Enemy::Enemy(const int id, const Track* trackPtr) :
 	GraphicsEntity(s_enemyProperties[id].getTextureFile()),
