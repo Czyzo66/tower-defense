@@ -9,20 +9,16 @@
 #include "Track.h"
 #include "Wave.h"
 
-class Level : public sf::Drawable
+class Level : public GraphicsEntity
 {
 private:
-	sf::Texture m_texture;
-	sf::Sprite m_sprite;
 	std::vector<Track> m_tracks;
-	Track m_track;
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void skipChars(std::ifstream& inf);
+	std::vector<Wave> m_waves;
+	void skipChars(std::ifstream& inf) const;
 public:
-	int load(sf::RenderWindow& window, const std::string& textureFile, const std::string& trackTextureFile, const std::string& trackDataFile);
-	Track& getTrack() { return m_track; }
-	const std::vector<Track> getTracks() const { return m_tracks; }
-	const sf::Vector2u getSize() const { return m_texture.getSize(); }
-	bool setScale(sf::Vector2f scale);	
+	int load(const sf::RenderWindow& window, const std::string& textureFile, const std::string& trackTextureFile, const std::string& trackDataFile);
+	const std::vector<Track>& getTracks() const { return m_tracks; }
+	std::vector<Wave>& getWaves() { return m_waves; }
+	sf::Vector2u getSize() const { return m_texture.getSize(); }
 };
 
