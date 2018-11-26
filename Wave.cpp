@@ -34,7 +34,7 @@ int Wave::loadFromFile(std::ifstream & inf, std::vector<Track>* ptrTracks)
 		skipChars(inf);
 		for (int i = 0; i < qty; ++i)
 		{
-			m_enemies.push_back(Enemy(id, &ptrTracks->at(trackNum)));
+			m_enemies.push_back(std::move(Enemy(id, &ptrTracks->at(trackNum))));
 		}		
 	}
 	skipChars(inf);

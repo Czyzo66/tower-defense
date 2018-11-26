@@ -23,13 +23,13 @@ int Level::load(const sf::RenderWindow& window, const std::string& trackTextureF
 	skipChars(inf);
 	while (inf.peek() != 'e')
 	{
-		m_tracks.push_back(Track(inf, trackTextureFile));
+		m_tracks.push_back(std::move(Track(inf, trackTextureFile)));
 		m_tracks.back().rescale(window.getSize());
 	}
 	skipChars(inf);
 	while (inf.peek() != 'e')
 	{
- 		m_waves.push_back(Wave(inf, &m_tracks));
+ 		m_waves.push_back(std::move(Wave(inf, &m_tracks)));
 	}
 	return 0;
 }
