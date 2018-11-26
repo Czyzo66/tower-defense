@@ -38,5 +38,7 @@ public:
 	sf::Vector2u getSize() const { return m_texture.getSize(); }
 	sf::FloatRect getLocalBounds() const { return m_sprite.getLocalBounds(); };
 	sf::FloatRect getGlobalBounds() const { return m_sprite.getGlobalBounds(); };
+
+	virtual ~GraphicsEntity() {}
 };
 
