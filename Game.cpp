@@ -1,5 +1,13 @@
 #include "Game.h"
 
+Game::Game() : m_window(std::vector<sf::VideoMode>(sf::VideoMode::getFullscreenModes())[0], "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen),
+m_menu(m_window.getSize()), m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU)
+{
+	setCursor();
+	m_window.setMouseCursorGrabbed(true);
+	m_window.setFramerateLimit(60);
+}
+
 int Game::setCursor()
 {
 	if (!m_iCursor.loadFromFile("resources\\cursor.png"))
@@ -57,7 +65,7 @@ void Game::eventLoop()
 						if (m_menu.getPlayBoundingBox().contains(static_cast<sf::Vector2f>(mousePosition)))
 						{
 							m_playerState = Player::PLAYER_IN_GAME;
-							m_levels.push_back(Level(m_window, "resources\\levels\\level_1.png", "resources\\levels\\level_1_track.png", "resources\\levels\\level_1_data.txt"));
+							m_levels.push_back(std::move(Level(m_window, "resources\\levels\\level_1.png", "resources\\levels\\level_1_track.png", "resources\\levels\\level_1_data.txt")));
 							m_levels[m_currentLevel].setScale(sf::Vector2f((static_cast<double>(m_window.getSize().x) / m_levels[m_currentLevel].getSize().x),
 								(static_cast<double>(m_window.getSize().y) / m_levels[m_currentLevel].getSize().y)));
 							m_clock.restart();

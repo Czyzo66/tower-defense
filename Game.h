@@ -30,17 +30,11 @@ private:
 	sf::Cursor m_cursor;
 	int m_playerState;
 	std::vector<bool> m_isButtonActive;
-	std::vector<std::unique_ptr<Enemy>> m_enemies;
 	std::vector<Level> m_levels;
 	int m_currentLevel;
 	Menu m_menu;
 public:
-	Game() : m_window(std::vector<sf::VideoMode>(sf::VideoMode::getFullscreenModes())[0], "Post-Ironic Aesthetic Experience", sf::Style::Fullscreen),
-		m_menu(m_window.getSize()), m_currentLevel(0), m_playerState(Player::PLAYER_IN_MENU) 
-	{
-		setCursor();
-		m_window.setMouseCursorGrabbed(true);
-	};
+	Game();
 	const sf::RenderWindow& getWindow() const { return m_window; }
 	int setCursor();
 	void eventLoop();
