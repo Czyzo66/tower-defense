@@ -13,7 +13,7 @@ std::map<int, EnemyProperties> initProps(const std::string& propsFile)
 	int ctr = 0;
 	while (inf >> tname && inf >> thp && inf >> tspeed && inf >> tvecx && inf >> tvecy && inf >> tfile)
 	{		
-		temp.insert(std::pair<int, EnemyProperties>(ctr, EnemyProperties(tname, thp, tspeed, sf::Vector2f(tvecx, tvecy), tfile)));
+		temp.insert(std::move(std::pair<int, EnemyProperties>(ctr, EnemyProperties(tname, thp, tspeed, sf::Vector2f(tvecx, tvecy), tfile))));
 		++ctr;
 	}
 	return temp;
@@ -61,7 +61,7 @@ void Enemy::move()
 	if (m_state == Enemy::State::STATE_REACHED_END)
 		return;
 	assert(m_trackPtr != nullptr);
-	if (m_trackPtr == nullptr)
+	if (m_trackPtr == nullptr || m_trackCounter < 0)
 	{
 		m_state = Enemy::State::STATE_ERROR_LOADING_TRACK;
 		return;
