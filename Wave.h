@@ -6,6 +6,11 @@
 #include "Error.h"
 #include "Enemy.h"
 
+/*
+ *	TODO:
+ *		Enemies shouldn't be activated all at the same time, because their sprites are overlapping.
+ */
+
 class Wave : public sf::Drawable
 {
 private:

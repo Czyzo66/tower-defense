@@ -12,6 +12,15 @@
 #include "Track.h"
 #include "EnemyProperties.h"
 
+/*
+ *	TODO:
+ *		Every enemy has its own texture loaded into memory, but enemies of the same type use the same texture.
+ *		Hence some textures in memory are redundant, enemies of the same type should share one texture.
+ *		One solution is to make some Resource Manager class, other possibility may be to use shared pointer.
+ *
+ *		Enemy movement is not smooth, maybe it need to be redesigned.
+  */
+
 class Enemy : public GraphicsEntity
 {
 private:
